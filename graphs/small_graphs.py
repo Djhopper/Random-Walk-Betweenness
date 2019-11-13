@@ -1,13 +1,11 @@
 from networkx.generators.small import bull_graph
-from networkx.readwrite.adjlist import write_adjlist
+from graphs.read_write import write_graph
 
 
-def generate_bull_graph(file_path):
+def generate_bull_graph():
     g = bull_graph()
-    write_adjlist(g, file_path, delimiter=",", comments="#")
+    write_graph(g, "bull_graph")
 
 
 if __name__ == '__main__':
-    path = r"C:\Users\Dan\PycharmProjects\Random-Walk-Betweenness\graphs\resources"
-
-    generate_bull_graph(path + r"\bull_graph")
+    generate_bull_graph()

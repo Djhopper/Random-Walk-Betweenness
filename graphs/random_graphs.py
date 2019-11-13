@@ -1,13 +1,11 @@
 from networkx.generators.random_graphs import erdos_renyi_graph
-from networkx.readwrite.adjlist import write_adjlist
+from graphs.read_write import write_graph
 
 
-def generate_erdos_renyi(n, p, file_path):
+def generate_erdos_renyi(n, p, graph_name):
     g = erdos_renyi_graph(n, p)
-    write_adjlist(g, file_path, delimiter=",", comments="#")
+    write_graph(g, graph_name)
 
 
 if __name__ == '__main__':
-    path = r'C:\Users\Dan\PycharmProjects\Random-Walk-Betweenness\graphs\resources'
-
-    generate_erdos_renyi(500, 0.05, path + r"\erdos_renyi")
+    generate_erdos_renyi(500, 0.05, "erdos_renyi")
