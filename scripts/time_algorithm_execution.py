@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 from graphs.read_write import read_graph
 
 
-def time_random_walk_centality_algorithm(graph_name, method_name):
+def time_random_walk_centrality_algorithm(graph_name, method_name):
     start_setup = timer()
     g = read_graph(graph_name)
     end_setup = timer()
@@ -21,4 +21,4 @@ def time_random_walk_centality_algorithm(graph_name, method_name):
 
 
 if __name__ == '__main__':
-    print(time_random_walk_centality_algorithm("erdos_renyi", "nx"))
+    print(time_random_walk_centrality_algorithm("erdos_renyi", "nx"))
