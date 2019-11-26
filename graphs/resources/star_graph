@@ -1,8 +1,10 @@
 #C:/Users/Dan/PycharmProjects/Random-Walk-Betweenness/graphs/small_graphs.py
 # GMT Tue Nov 26 17:19:12 2019
-# Bull Graph
-0,1,2
-1,2,3
-2,4
+# 
+0,1,2,3,4,5,6
+1
+2
 3
 4
+5
+6
