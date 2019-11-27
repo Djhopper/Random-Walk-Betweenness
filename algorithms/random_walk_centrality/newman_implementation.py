@@ -11,19 +11,29 @@ def get_diagonal_matrix_of_node_degrees(g):
     return D
 
 
+def invert_matrix(M, method="default"):
+    if method == "default":
+        return M.I
+    else:
+        raise NotImplementedError
+
+
+# Algorithm as described in 'A measure of betweenness centrality based on random walks',
+# M.E.J. Newman (2004)
 def random_walk_centrality(g):
+    n = g.number_of_nodes()
+
     D = get_diagonal_matrix_of_node_degrees(g)
     A = nx.adjacency_matrix(g)
-
     M = D - A
 
     # Remove last column and row
-    n = M.shape[0]
-    M_missing_a_row = np.delete(M, n-1, axis=0)
-    M_missing_a_row = np.delete(M_missing_a_row, n-1, axis=1)
+    M_2 = np.delete(M, n-1, axis=0)
+    M_2 = np.delete(M_2, n-1, axis=1)
 
     # Invert matrix
-    inverse = M_missing_a_row.I
+    inverse = invert_matrix(M_2, method="default")
+
     # Add back column and row with all 0s
     T = np.hstack((inverse, np.zeros((n-1, 1))))
     T = np.vstack((T, np.zeros((1, n))))
@@ -46,15 +56,3 @@ def random_walk_centrality(g):
         b[i] /= (0.5 * (n-1) * (n-2))
 
     return dict((i, x) for i, x in enumerate(b))
-
-
-if __name__ == '__main__':
-    from graphs.read_write import read_graph
-    from networkx.generators.random_graphs import erdos_renyi_graph
-    #g = read_graph("house_graph")
-    g = erdos_renyi_graph(20, 0.1)
-    g = read_graph("erdos_renyi")
-    print("My version:", random_walk_centrality(g))
-
-    from algorithms.random_walk_centrality.random_walk_centrality import random_walk_centrality as default_impl
-    print("Other version:", dict((x, default_impl(g)[x]) for x in sorted(default_impl(g))))
