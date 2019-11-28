@@ -32,27 +32,21 @@ def random_walk_centrality(g):
     M_2 = np.delete(M_2, n-1, axis=1)
 
     # Invert matrix
-    inverse = invert_matrix(M_2, method="default")
+    M_3 = invert_matrix(M_2, method="default")
 
     # Add back column and row with all 0s
-    T = np.hstack((inverse, np.zeros((n-1, 1))))
+    T = np.hstack((M_3, np.zeros((n-1, 1))))
     T = np.vstack((T, np.zeros((1, n))))
 
-    b = [0 for _ in range(n)]
-    for s in range(n):
-        for t in range(s+1, n):
-            V = [T[i, s] - T[i, t] for i in range(n)]
+    # Sum everything up
+    b = [
+        sum(
+            abs((T[i, s] - T[i, t]) - (T[j, s] - T[j, t])) if i not in (s, t) else 0
+            for j in g.neighbors(i)
+            for s in range(n)
+            for t in range(s+1, n)
+        ) / ((n-1) * (n-2))
+        for i in range(n)
+    ]
 
-            I = [0.5 *
-                 sum(A[i, j] * abs(V[i] - V[j]) for j in range(n))
-                 for i in range(n)]
-
-            I[s] = I[t] = 0
-
-            for i in range(n):
-                b[i] += I[i]
-
-    for i in range(n):
-        b[i] /= (0.5 * (n-1) * (n-2))
-
-    return dict((i, x) for i, x in enumerate(b))
+    return dict(zip(np.arange(n), b))

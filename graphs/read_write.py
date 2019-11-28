@@ -5,6 +5,7 @@ from networkx.relabel import convert_node_labels_to_integers
 
 
 resources_path = r"C:\Users\Dan\PycharmProjects\Random-Walk-Betweenness\graphs\resources"
+# TODO Fix this -- absolute path = bad
 
 
 def write_graph(g, graph_name):
