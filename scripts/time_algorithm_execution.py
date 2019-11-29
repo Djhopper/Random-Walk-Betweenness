@@ -22,3 +22,4 @@ def time_random_walk_centrality_algorithm(graph_name, method_name):
 
 if __name__ == '__main__':
     print(time_random_walk_centrality_algorithm("erdos_renyi", "nx"))
+    print(time_random_walk_centrality_algorithm("erdos_renyi", "newman"))
