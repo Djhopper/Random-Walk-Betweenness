@@ -64,3 +64,9 @@ def random_walk_centrality(g):
     ]
 
     return dict(zip(np.arange(n), b))
+
+
+# TODO turn calculation of b into a bunch of vector shit.
+# TODO Add alternative method that uses less memory (storing all of V at once is O(n^3) = :((((
+# TODO Make lots of improvements :))
+# TODO speed up the matrix inversion by using the alternative method given by Brande et al (2005)

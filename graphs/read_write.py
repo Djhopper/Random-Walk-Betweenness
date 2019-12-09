@@ -4,8 +4,11 @@ from networkx.readwrite.adjlist import write_adjlist
 from networkx.relabel import convert_node_labels_to_integers
 
 
-resources_path = r"C:\Users\Dan\PycharmProjects\Random-Walk-Betweenness\graphs\resources"
-# TODO Fix this -- absolute path = bad
+# Get path of the resources directory
+cwd = os.getcwd()
+folder_name = "Random-Walk-Betweenness"
+base_directory = cwd[:cwd.find(folder_name)] + folder_name
+resources_path = os.path.join(base_directory, r"graphs\resources")
 
 
 def write_graph(g, graph_name):

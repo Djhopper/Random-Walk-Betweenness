@@ -1,3 +1,8 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
 from algorithms.random_walk_centrality.random_walk_centrality import random_walk_centrality
 from timeit import default_timer as timer
 from graphs.read_write import read_graph
@@ -21,5 +26,5 @@ def time_random_walk_centrality_algorithm(graph_name, method_name):
 
 
 if __name__ == '__main__':
-    print(time_random_walk_centrality_algorithm("erdos_renyi", "nx"))
-    print(time_random_walk_centrality_algorithm("erdos_renyi", "newman"))
+    print("nx implementation:", time_random_walk_centrality_algorithm("erdos_renyi", "nx"))
+    print("my implementation:", time_random_walk_centrality_algorithm("erdos_renyi", "newman"))
