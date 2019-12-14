@@ -50,20 +50,23 @@ def random_walk_centrality(g):
     T = np.hstack((M_3, np.zeros((n-1, 1))))
     T = np.vstack((T, np.zeros((1, n))))
 
-    V = calculate_V(T, n)
+    b = [0 for _ in range(n)]
+    T = np.squeeze(np.asarray(T))
 
-    # Sum everything up
-    b = [
-        sum(
-            abs(V[i, s, t] - V[j, s, t]) if i not in (s, t) else 0
-            for j in g.neighbors(i)
-            for s in range(n)
-            for t in range(s+1, n)
-        ) / ((n-1) * (n-2))
-        for i in range(n)
-    ]
+    for i in range(n):
+        for j in g.neighbors(i):
+            temp = np.array([T[i] for _ in range(n)])
+            Vi = temp.transpose() - temp
+            temp = np.array([T[j] for _ in range(n)])
+            Vj = temp.transpose() - temp
 
-    return dict(zip(np.arange(n), b))
+            for s in (x for x in range(n) if x != i):
+                for t in (x for x in range(n) if x != i):
+                    b[i] += abs(Vi[s, t] - Vj[s, t])
+
+    b = [x / (2 * (n-1)*(n-2)) for x in b]
+
+    return dict(zip(range(n), b))
 
 
 # TODO turn calculation of b into a bunch of vector shit.
