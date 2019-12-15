@@ -53,23 +53,34 @@ def random_walk_centrality(g):
     b = [0 for _ in range(n)]
     T = np.squeeze(np.asarray(T))
 
-    for i in range(n):
-        for j in g.neighbors(i):
-            temp = np.array([T[i] for _ in range(n)])
-            Vi = temp.transpose() - temp
-            temp = np.array([T[j] for _ in range(n)])
-            Vj = temp.transpose() - temp
+    for i, j in g.edges:
+        temp = np.array([T[i] for _ in range(n)])
+        Vi = temp.transpose() - temp
+        temp = np.array([T[j] for _ in range(n)])
+        Vj = temp.transpose() - temp
 
-            for s in (x for x in range(n) if x != i):
-                for t in (x for x in range(n) if x != i):
-                    b[i] += abs(Vi[s, t] - Vj[s, t])
+        for s in range(n):
+            for t in range(s+1, n):
+                val = abs(Vi[s, t] - Vj[s, t])
+                if i not in (s, t):
+                    b[i] += val
+                if j not in (s, t):
+                    b[j] += val
 
-    b = [x / (2 * (n-1)*(n-2)) for x in b]
+    b = [x / ((n-1)*(n-2)) for x in b]
 
     return dict(zip(range(n), b))
 
 
-# TODO turn calculation of b into a bunch of vector shit.
-# TODO Add alternative method that uses less memory (storing all of V at once is O(n^3) = :((((
-# TODO Make lots of improvements :))
 # TODO speed up the matrix inversion by using the alternative method given by Brande et al (2005)
+
+
+if __name__ == '__main__':
+    from graphs.read_write import read_graph
+    from algorithms.random_walk_centrality.nx_implementation import random_walk_centrality as nx_impl
+
+    g = read_graph("bull_graph")
+
+    print(random_walk_centrality(g))
+
+    print(nx_impl(g))
