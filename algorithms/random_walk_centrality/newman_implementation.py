@@ -19,14 +19,10 @@ def invert_matrix(M, method="default"):
         raise NotImplementedError
 
 
-# V(i,s,t) = T(i,s) - T(i,t)
-def calculate_V(T, n):
-    R = np.array([T for _ in range(n)])  # R(z,x,y) = T(x,y)
-    Y = np.swapaxes(R, 0, 1)             # Y(i,s,t) = T(i,t)
-    X = np.swapaxes(Y, 1, 2)             # X(i,s,t) = T(i,s)
-
-    V = X - Y
-    return V
+def remove_row_and_column(matrix, i):
+    m = np.delete(matrix, i, axis=0)
+    m = np.delete(m, i, axis=1)
+    return m
 
 
 # Algorithm as described in 'A measure of betweenness centrality based on random walks',
@@ -39,35 +35,27 @@ def random_walk_centrality(g):
 
     M = D - A
 
-    # Remove last column and row
-    M_2 = np.delete(M, n-1, axis=0)
-    M_2 = np.delete(M_2, n-1, axis=1)
-
-    # Invert matrix
+    M_2 = remove_row_and_column(M, n-1)
     M_3 = invert_matrix(M_2, method="default")
 
     # Add back column and row with all 0s
     T = np.hstack((M_3, np.zeros((n-1, 1))))
     T = np.vstack((T, np.zeros((1, n))))
 
-    b = [0 for _ in range(n)]
-    T = np.squeeze(np.asarray(T))
+    T = np.squeeze(np.asarray(T))  # Convert matrix to array
 
+    b = [0 for _ in range(n)]
     for i, j in g.edges:
         temp = np.array([T[i] for _ in range(n)])
         Vi = temp.transpose() - temp
         temp = np.array([T[j] for _ in range(n)])
         Vj = temp.transpose() - temp
 
-        for s in range(n):
-            for t in range(s+1, n):
-                val = abs(Vi[s, t] - Vj[s, t])
-                if i not in (s, t):
-                    b[i] += val
-                if j not in (s, t):
-                    b[j] += val
+        B = np.abs(Vi - Vj)
+        b[i] += np.sum(remove_row_and_column(B, i))
+        b[j] += np.sum(remove_row_and_column(B, j))
 
-    b = [x / ((n-1)*(n-2)) for x in b]
+    b = [x / (2 * (n-1)*(n-2)) for x in b]
 
     return dict(zip(range(n), b))
 
