@@ -31,13 +31,11 @@ if __name__ == '__main__':
     from graphs.random_graphs import generate_erdos_renyi
     import pandas as pd
     data = []
-    for n in range(100, 801, 100):
+    for n in range(2000, 2001, 100):
         generate_erdos_renyi(n, 10/n, "erdos_renyi_temp")
         data.append(time_random_walk_centrality_algorithm("erdos_renyi_temp", "nx"))
-        data.append(time_random_walk_centrality_algorithm("erdos_renyi_temp", "newman"))
+        data.append(time_random_walk_centrality_algorithm("erdos_renyi_temp", "brandes"))
 
     df = pd.DataFrame(data)
-    df["V^3"] = df["nodes"] ** 3
-    df["EV^2"] = df["edges"] * (df["nodes"] ** 2)
 
     df.to_csv("dat.csv", index=False)

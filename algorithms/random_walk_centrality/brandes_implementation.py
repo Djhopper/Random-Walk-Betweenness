@@ -43,36 +43,37 @@ def calc_C(g, n):
     return T
 
 
+def edge_array(i, j, n):
+    a = np.zeros(n)
+    a[i] = 1
+    a[j] = -1
+    return a
+
+
 # Algorithm as described in 'Centrality Measures Based on Current Flow',
 # Ulrik Brandes and Daniel Fleischer (2005)
 def random_walk_centrality(g):
     n = g.number_of_nodes()
-    b = [0 for _ in range(n)]
+    nrange = np.arange(1, n+1)
+    betweenness = np.zeros(n)
 
-    B = [[1 if i == v else -1 if j == v else 0
-         for (i, j) in g.edges]
-         for v in g.nodes]
-    B = np.array(B)
+    B = np.vstack((edge_array(i, j, n) for (i, j) in g.edges))
 
     C = calc_C(g, n)
 
-    BC = np.matmul(B.transpose(), C.transpose())
+    BC = B @ C
 
     for edge_number, e in enumerate(g.edges):
         v, w = e
         row = BC[edge_number, :]
         pos = rankdata(-row, method="ordinal")
 
-        for i in range(1, n+1):
-            posevi = pos[i-1]
-            fevi = row[i-1]
-            b[v] += (i - posevi) * fevi
-            b[w] += (n + 1 - i - posevi) * fevi
+        betweenness[v] += np.sum((nrange - pos).dot(row))
+        betweenness[w] += np.sum((n + 1 - nrange - pos).dot(row))
 
-    for i in range(1, n+1):
-        b[i-1] = (b[i-1] - i + 1) * (2 / ((n-1) * (n-2)))
+    betweenness = (betweenness - nrange + 1) * (2 / ((n-1) * (n-2)))
 
-    return dict(zip(range(n), b))
+    return dict(zip(range(n), betweenness))
 
 
 # TODO speed up the matrix inversion by using the alternative method given by Brande et al (2005)

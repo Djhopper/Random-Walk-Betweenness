@@ -1,6 +1,7 @@
 from timeit import default_timer as timer
 import numpy as np
 import networkx as nx
+from scipy.stats import rankdata
 
 
 # Used for timing sections of a function
@@ -46,46 +47,67 @@ def remove_row_and_column(matrix, i):
     return m
 
 
-def newman_implementation(g):
-    tm = TimeMachine()
-    n = g.number_of_nodes()
-
+def calc_C(g, n):
     D = get_diagonal_matrix_of_node_degrees(g)
     A = nx.adjacency_matrix(g)
 
-    M = D - A
+    M = D - A  # Laplacian matrix
 
-    M_2 = remove_row_and_column(M, n - 1)
+    M_2 = remove_row_and_column(M, 0)
     M_3 = invert_matrix(M_2, method="default")
 
     # Add back column and row with all 0s
-    T = np.hstack((M_3, np.zeros((n - 1, 1))))
-    T = np.vstack((T, np.zeros((1, n))))
+    T = np.hstack((np.zeros((n - 1, 1)), M_3))
+    T = np.vstack((np.zeros((1, n)), T))
 
     T = np.squeeze(np.asarray(T))  # Convert matrix to array
+    return T
+
+
+def edge_array(i, j, n):
+    a = np.zeros(n)
+    a[i] = 1
+    a[j] = -1
+    return a
+
+
+def implementation(g):
+    tm = TimeMachine()
+
+    n = g.number_of_nodes()
+    nrange = np.arange(1, n + 1)
+    betweenness = np.zeros(n)
 
     tm.time("_")
 
-    b = [0 for _ in range(n)]
-    for i, j in g.edges:
-        temp = np.array([T[i] for _ in range(n)])
-        Vi = temp.transpose() - temp
-        temp = np.array([T[j] for _ in range(n)])
-        Vj = temp.transpose() - temp
+    B = np.vstack((edge_array(i, j, n) for (i, j) in g.edges))
 
-        tm.time("setup")
+    tm.time("B")
 
-        B = np.abs(Vi - Vj)
-        b[i] += np.sum(remove_row_and_column(B, i))
-        b[j] += np.sum(remove_row_and_column(B, j))
+    C = calc_C(g, n)
 
-        tm.time("summation")
+    tm.time("C")
 
-    b = [x / (2 * (n - 1) * (n - 2)) for x in b]
+    BC = B @ C
 
-    ret = dict(zip(range(n), b))
+    tm.time("BC")
 
-    tm.time("_")
+    for edge_number, e in enumerate(g.edges):
+        v, w = e
+        tm.time("1")
+        row = BC[edge_number, :]
+        tm.time("2")
+        pos = rankdata(-row, method="ordinal")
+        tm.time("3")
+
+        betweenness[v] += np.sum((nrange - pos).dot(row))
+        betweenness[w] += np.sum((n + 1 - nrange - pos).dot(row))
+        tm.time("4")
+
+    betweenness = (betweenness - nrange + 1) * (2 / ((n - 1) * (n - 2)))
+    ret = dict(zip(range(n), betweenness))
+    tm.time("tidy")
+
     return tm.get_data()
 
 
@@ -94,6 +116,6 @@ if __name__ == '__main__':
     import pandas as pd
     g = read_graph("erdos_renyi")
 
-    data = pd.DataFrame([newman_implementation(g) for _ in range(1)])
+    data = pd.DataFrame([implementation(g) for _ in range(1)])
     data.to_csv("results.csv", index=False)
     print(data)
