@@ -1,5 +1,6 @@
 import numpy as np
 import networkx as nx
+from scipy.stats import rankdata
 
 
 def get_diagonal_matrix_of_node_degrees(g):
@@ -25,39 +26,56 @@ def remove_row_and_column(matrix, i):
     return m
 
 
-# Algorithm as described in 'A measure of betweenness centrality based on random walks',
-# M.E.J. Newman (2004)
-def random_walk_centrality(g):
-    n = g.number_of_nodes()
-
+def calc_C(g, n):
     D = get_diagonal_matrix_of_node_degrees(g)
     A = nx.adjacency_matrix(g)
 
-    M = D - A
+    M = D - A  # Laplacian matrix
 
-    M_2 = remove_row_and_column(M, n-1)
+    M_2 = remove_row_and_column(M, 0)
     M_3 = invert_matrix(M_2, method="default")
 
     # Add back column and row with all 0s
-    T = np.hstack((M_3, np.zeros((n-1, 1))))
-    T = np.vstack((T, np.zeros((1, n))))
+    T = np.hstack((np.zeros((n - 1, 1)), M_3))
+    T = np.vstack((np.zeros((1, n)), T))
 
     T = np.squeeze(np.asarray(T))  # Convert matrix to array
+    return T
 
+
+# Algorithm as described in 'Centrality Measures Based on Current Flow',
+# Ulrik Brandes and Daniel Fleischer (2005)
+def random_walk_centrality(g):
+    n = g.number_of_nodes()
     b = [0 for _ in range(n)]
-    for i, j in g.edges:
-        temp = np.array([T[i] for _ in range(n)])
-        Vi = temp.transpose() - temp
-        temp = np.array([T[j] for _ in range(n)])
-        Vj = temp.transpose() - temp
 
-        B = np.abs(Vi - Vj)
-        b[i] += np.sum(remove_row_and_column(B, i))
-        b[j] += np.sum(remove_row_and_column(B, j))
+    B = [[1 if i == v else -1 if j == v else 0
+         for (i, j) in g.edges]
+         for v in g.nodes]
+    B = np.array(B)
 
-    b = [x / (2 * (n-1)*(n-2)) for x in b]
+    C = calc_C(g, n)
+
+    BC = np.matmul(B.transpose(), C.transpose())
+
+    for edge_number, e in enumerate(g.edges):
+        v, w = e
+        row = BC[edge_number, :]
+        pos = rankdata(-row, method="ordinal")
+
+        for i in range(1, n+1):
+            posevi = pos[i-1]
+            fevi = row[i-1]
+            b[v] += (i - posevi) * fevi
+            b[w] += (n + 1 - i - posevi) * fevi
+
+    for i in range(1, n+1):
+        b[i-1] = (b[i-1] - i + 1) * (2 / ((n-1) * (n-2)))
 
     return dict(zip(range(n), b))
+
+
+# TODO speed up the matrix inversion by using the alternative method given by Brande et al (2005)
 
 
 if __name__ == '__main__':
