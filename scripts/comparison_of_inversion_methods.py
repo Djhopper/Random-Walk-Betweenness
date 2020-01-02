@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     tm = TimeMachine()
     # Do partial LU decomposition
-    preconditioner = linalg.spilu(M, permc_spec="MMD_AT_PLUS_A").solve(np.identity(n - 1))
+    inverse = linalg.spilu(M).solve(np.identity(n - 1))
     tm.time("fancy method")
     print(tm.times)
 
