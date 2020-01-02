@@ -2,6 +2,7 @@ from timeit import default_timer as timer
 import numpy as np
 import networkx as nx
 from scipy.stats import rankdata
+from scipy.sparse import linalg, csc_matrix
 
 
 # Used for timing sections of a function
@@ -34,11 +35,28 @@ def get_diagonal_matrix_of_node_degrees(g):
 
 
 # Matrix is known to be symmetric & positive definite
-def invert_matrix(M, method="default"):
-    if method == "default":
-        return M.I
+def invert_matrix(M, method="default", new=False):
+    if new:
+        if method == "default":
+            inverse = np.linalg.inv(M.todense())
+            return inverse
+        elif method == "fancy":
+            quit(69)
+            n = M.shape[0]
+            preconditioner = linalg.spilu(M)
+            inverse = np.array([])
+            for i in range(n):
+                b = np.zeros(n)
+                b[i] = 1
+                inverse[i] = linalg.cg(A=M, b=b, M=preconditioner)
+            return inverse
+        else:
+            raise NotImplementedError
     else:
-        raise NotImplementedError
+        if method == "default":
+            return M.I
+        else:
+            raise NotImplementedError
 
 
 def remove_row_and_column(matrix, i):
@@ -46,22 +64,50 @@ def remove_row_and_column(matrix, i):
     m = np.delete(m, i, axis=1)
     return m
 
-
-def calc_C(g, n):
-    D = get_diagonal_matrix_of_node_degrees(g)
-    A = nx.adjacency_matrix(g)
-
-    M = D - A  # Laplacian matrix
-
-    M_2 = remove_row_and_column(M, 0)
-    M_3 = invert_matrix(M_2, method="default")
-
-    # Add back column and row with all 0s
-    T = np.hstack((np.zeros((n - 1, 1)), M_3))
-    T = np.vstack((np.zeros((1, n)), T))
-
-    T = np.squeeze(np.asarray(T))  # Convert matrix to array
-    return T
+def calc_C(g, n, sparse, new=False):
+    if new:
+        # Get Laplacian
+        tm = TimeMachine()
+        M = nx.linalg.laplacianmatrix.laplacian_matrix(g)
+        tm.time("0")
+        # Remove first row and column
+        M = M[list(range(1, n)), :]
+        M = M[:, list(range(1, n))]
+        tm.time("1")
+        # Invert matrix
+        M = invert_matrix(M, method="fancy" if sparse else "default")
+        tm.time("2")
+        # Add back first row and column with all 0s
+        M = M.todense() if sparse else M
+        tm.time("3")
+        T = np.hstack((np.zeros((n - 1, 1)), M))
+        T = np.vstack((np.zeros((1, n)), T))
+        tm.time("4")
+        # Convert from matrix to array
+        T = np.squeeze(np.asarray(T))
+        tm.time("5")
+        import pandas as pd
+        print(pd.DataFrame([tm.get_data()]))
+        quit()
+        return T
+    else:
+        tm = TimeMachine()
+        M = get_diagonal_matrix_of_node_degrees(g) - nx.adjacency_matrix(g)  # Laplacian matrix
+        tm.time("1")
+        M_2 = remove_row_and_column(M, 0)
+        tm.time("2")
+        M_3 = invert_matrix(M_2, method="default")
+        tm.time("3")
+        # Add back column and row with all 0s
+        T = np.hstack((np.zeros((n - 1, 1)), M_3))
+        T = np.vstack((np.zeros((1, n)), T))
+        tm.time("4")
+        T = np.squeeze(np.asarray(T))  # Convert matrix to array
+        tm.time("5")
+        import pandas as pd
+        print(pd.DataFrame([tm.get_data()]))
+        quit()
+        return T
 
 
 def edge_array(i, j, n):
@@ -84,7 +130,7 @@ def implementation(g):
 
     tm.time("B")
 
-    C = calc_C(g, n)
+    C = calc_C(g, n, sparse=False)
 
     tm.time("C")
 

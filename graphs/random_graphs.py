@@ -8,4 +8,4 @@ def generate_erdos_renyi(n, p, graph_name):
 
 
 if __name__ == '__main__':
-    generate_erdos_renyi(1000, 0.05, "erdos_renyi")
+    generate_erdos_renyi(100, 0.1, "erdos_renyi")

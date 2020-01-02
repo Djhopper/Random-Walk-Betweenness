@@ -11,6 +11,10 @@ def random_walk_centrality(g, method="nx"):
         return newman_implementation(g)
     if method == "brandes":
         return brandes_implementation(g)
+    if method == "brandes_sparse":
+        return brandes_implementation(g, sparse=True)
+    if method == "brandes_dense":
+        return brandes_implementation(g, sparse=False)
     raise NotImplementedError
 
 
