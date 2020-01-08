@@ -1,8 +1,8 @@
-from networkx.generators.random_graphs import erdos_renyi_graph
 import networkx as nx
-from tests.timing_bench import TimeMachine
 from scipy.sparse import linalg
 import numpy as np
+from tests.timing_bench import TimeMachine
+from graphs.random_graphs import get_erdos_renyi
 
 
 '''
@@ -12,8 +12,7 @@ matrix inversion.
 '''
 if __name__ == '__main__':
     # Create graph
-    g = erdos_renyi_graph(10000, 10/10000)
-    Gcc = g.subgraph(sorted(nx.connected_components(g), key=len, reverse=True)[0])
+    g = get_erdos_renyi(n=10000, average_degree=10)
     # Setup (create matrix that needs to be inverted)
     n = g.number_of_nodes()
     M = nx.linalg.laplacianmatrix.laplacian_matrix(g).tolil()
@@ -21,15 +20,14 @@ if __name__ == '__main__':
     M = M[:, list(range(1, n))].tocsc()
 
     tm = TimeMachine()
-    # Do partial LU decomposition
+    # Do partial LU decomposition method
     inverse = linalg.spilu(M).solve(np.identity(n - 1))
     tm.time("fancy method")
-    print(tm.times)
 
     M = M.todense()
-    tm.time("densify")
+    tm.time("_")
 
-    # Do invert
+    # Do standard inversion
     inverse = M.I
     tm.time("normal method")
 
