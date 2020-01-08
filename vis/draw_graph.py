@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from algorithms.random_walk_centrality.random_walk_centrality import random_walk_centrality
 
 
+# TODO: Lay out the nodes some way other than random. ForceAtlas2 an option. Make some pretty figures for the diss.
+
 def draw_graph(graph_name, metric=None):
     g = read_graph(graph_name)
 
