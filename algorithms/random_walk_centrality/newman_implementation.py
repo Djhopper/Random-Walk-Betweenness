@@ -1,22 +1,6 @@
 import numpy as np
 import networkx as nx
-
-
-# Construct diagonal matrix where D(i,i) = degree of node i
-def get_diagonal_matrix_of_node_degrees(g):
-    degrees = list(g.degree())  # Get degrees of nodes
-    degrees.sort(key=lambda x: int(x[0]))  # Sort by node_id
-    degrees = [x[1] for x in degrees]  # Toss away the ids
-
-    D = np.diag(degrees)
-    return D
-
-
-# Remove i-th row and column from a matrix
-def remove_row_and_column(matrix, i):
-    m = np.delete(matrix, i, axis=0)
-    m = np.delete(m, i, axis=1)
-    return m
+from algorithms.random_walk_centrality.helper_functions import construct_diag_node_degrees, remove_row_and_column
 
 
 # Algorithm as described in 'A measure of betweenness centrality based on random walks',
@@ -26,7 +10,7 @@ def random_walk_centrality(g):
 
     # Calculate Laplacian matrix
 
-    D = get_diagonal_matrix_of_node_degrees(g)
+    D = construct_diag_node_degrees(g)
     A = nx.adjacency_matrix(g)
     L = D - A
 
