@@ -4,7 +4,12 @@ from algorithms.random_walk_centrality.brandes_implementation import random_walk
 from graphs.read_write import read_graph
 
 
+method_names = ["nx", "newman", "brandes", "brandes_dense", "brandes_sparse"]
+
+
 def random_walk_centrality(g, method="nx"):
+    assert method in method_names
+
     if method == "nx":
         return nx_implementation(g)
     if method == "newman":
@@ -15,7 +20,6 @@ def random_walk_centrality(g, method="nx"):
         return brandes_implementation(g, sparse=True)
     if method == "brandes_dense":
         return brandes_implementation(g, sparse=False)
-    raise NotImplementedError
 
 
 if __name__ == '__main__':

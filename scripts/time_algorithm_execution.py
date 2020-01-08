@@ -1,7 +1,3 @@
-import os
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from algorithms.random_walk_centrality.random_walk_centrality import random_walk_centrality
 from timeit import default_timer as timer
 from graphs.read_write import read_graph
@@ -10,19 +6,20 @@ import numpy as np
 import pandas as pd
 
 
+# Runs a random walk centrality algorithm on a graph and returns a dictionary with information about how long it took
+# graph - can be a networkx graph, or can be a string which is the name of a graph that has been stored previously
+# method_name - string, dictates which implementation will be used
 def time_random_walk_centrality_algorithm(graph, method_name):
-    start_setup = timer()
-
+    # Setup graph
     if type(graph) == str:
         g = read_graph(graph)
     else:
         g = graph
         graph = "_"
 
-    end_setup = timer()
-
     start_calculation = timer()
 
+    # Execute algorithm
     result = random_walk_centrality(g, method=method_name)
 
     end_calculation = timer()
@@ -30,19 +27,15 @@ def time_random_walk_centrality_algorithm(graph, method_name):
     return {
         "graph_name": graph,
         "method_name": method_name,
-        "setup_time": end_setup - start_setup,
         "time": end_calculation - start_calculation,
         "edges": g.number_of_edges(),
         "nodes": g.number_of_nodes(),
     }
 
 
-def time_on_erdos_renyi_graphs(methods):
-    repeats = 10
-    max_time = 5
-    node_interval = 50
-    average_degree = 10
-
+# Times given implementations on erdos-renyi graphs of gradually increasing sizes,
+# stopping when runtime exceeds max_time
+def time_on_erdos_renyi_graphs(methods, repeats=10, max_time=5, node_interval=50, average_degree=10):
     data = []
 
     nodes = 0
@@ -68,19 +61,6 @@ def time_on_erdos_renyi_graphs(methods):
 
 
 if __name__ == '__main__':
-    df = time_on_erdos_renyi_graphs(["nx", "brandes_dense", "newman"])
+    df = time_on_erdos_renyi_graphs(["nx", "brandes", "newman"])
     df.to_csv("betweenness_algorithm_speeds_on_sparse_erdos_renyi_graphs.csv", index=False)
     print(df)
-
-    quit()
-
-    from graphs.random_graphs import generate_erdos_renyi
-    data = []
-    for n in range(500, 1001, 100):
-        generate_erdos_renyi(n, 10/n, "erdos_renyi_temp")
-        data.append(time_random_walk_centrality_algorithm("erdos_renyi_temp", "brandes_sparse"))
-        data.append(time_random_walk_centrality_algorithm("erdos_renyi_temp", "brandes_dense"))
-
-    df = pd.DataFrame(data)
-    print(df)
-    df.to_csv("dat.csv", index=False)

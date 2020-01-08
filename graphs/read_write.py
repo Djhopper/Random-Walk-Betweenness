@@ -18,3 +18,7 @@ def write_graph(g, graph_name):
 def read_graph(graph_name):
     g = read_adjlist(os.path.join(resources_path, graph_name), delimiter=",", comments="#")
     return convert_node_labels_to_integers(g)
+
+
+def get_all_existing_graph_names():
+    return os.listdir(resources_path)
