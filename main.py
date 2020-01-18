@@ -12,7 +12,8 @@ def main():
 
         print("Select a graph by inputting a number:")
         for i, name in enumerate(graph_names):
-            print(i, "-", name)
+            print(i, "-", name,
+                  "(", read_graph(name).number_of_nodes(), "nodes,", read_graph(name).number_of_edges(), "edges )")
 
         graph_name = graph_names[int(input())]
 

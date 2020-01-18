@@ -12,11 +12,15 @@ resources_path = os.path.join(base_directory, "graphs", "resources")
 
 
 def write_graph(g, graph_name):
-    write_adjlist(g, os.path.join(resources_path, graph_name), delimiter=",", comments="#")
+    write_adjlist(g, os.path.join(resources_path, graph_name), delimiter="\t", comments="#")
 
 
 def read_graph(graph_name):
-    g = read_adjlist(os.path.join(resources_path, graph_name), delimiter=",", comments="#")
+    g = read_adjlist(
+        os.path.join(resources_path, graph_name),
+        delimiter="\t" if graph_name not in ["facebook_combined.txt", "email-Eu-core"] else " ",
+        comments="#"
+    )
     return convert_node_labels_to_integers(g)
 
 
