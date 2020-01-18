@@ -8,7 +8,7 @@ from networkx.relabel import convert_node_labels_to_integers
 cwd = os.getcwd()
 folder_name = "Random-Walk-Betweenness"
 base_directory = cwd[:cwd.find(folder_name)] + folder_name
-resources_path = os.path.join(base_directory, r"graphs\resources")
+resources_path = os.path.join(base_directory, "graphs", "resources")
 
 
 def write_graph(g, graph_name):
