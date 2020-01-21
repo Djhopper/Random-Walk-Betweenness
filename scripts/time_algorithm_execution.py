@@ -4,6 +4,8 @@ from graphs.read_write import read_graph
 from graphs.random_graphs import get_erdos_renyi
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 # Runs a random walk centrality algorithm on a graph and returns a dictionary with information about how long it took
@@ -35,13 +37,14 @@ def time_random_walk_centrality_algorithm(graph, method_name):
 
 # Times given implementations on erdos-renyi graphs of gradually increasing sizes,
 # stopping when runtime exceeds max_time
-def time_on_erdos_renyi_graphs(methods, repeats=10, max_time=5, node_interval=50, average_degree=10):
+def time_on_erdos_renyi_graphs(methods, repeats=10, max_time=0.1, node_interval=50, average_degree=10, debug=False):
     data = []
 
     nodes = 0
     while len(methods) > 0:
         nodes += node_interval
-        print("Doing " + str(nodes) + " node graph using methods: ", methods)
+        if debug:
+            print("Doing " + str(nodes) + " node graph using methods: ", methods)
 
         g = get_erdos_renyi(nodes, average_degree)
 
@@ -60,7 +63,16 @@ def time_on_erdos_renyi_graphs(methods, repeats=10, max_time=5, node_interval=50
     return df
 
 
+def plot_brande_on_erdos_renyi():
+    df = time_on_erdos_renyi_graphs(["nx"], 1, 80, 250, 10, False)[["nodes", "edges", "time"]]
+    sns.scatterplot(x="nodes", y="time", data=df)
+    plt.show()
+
+
 if __name__ == '__main__':
-    df = time_on_erdos_renyi_graphs(["nx", "brandes", "newman"])
+    plot_brande_on_erdos_renyi()
+    quit()
+
+    df = time_on_erdos_renyi_graphs(["nx", "brandes", "newman"], debug=True)
     df.to_csv("betweenness_algorithm_speeds_on_sparse_erdos_renyi_graphs.csv", index=False)
     print(df)
