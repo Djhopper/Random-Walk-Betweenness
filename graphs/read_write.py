@@ -18,7 +18,7 @@ def write_graph(g, graph_name):
 def read_graph(graph_name):
     g = read_adjlist(
         os.path.join(resources_path, graph_name),
-        delimiter="\t" if graph_name not in ["facebook_combined.txt", "email-Eu-core"] else " ",
+        delimiter="\t" if graph_name not in ["facebook_combined.txt", "email-Eu-core.txt"] else " ",
         comments="#"
     )
     return convert_node_labels_to_integers(g)
