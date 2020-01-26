@@ -1,4 +1,5 @@
 from networkx.algorithms.centrality.current_flow_betweenness import current_flow_betweenness_centrality
+from networkx.algorithms.components import connected_components
 import networkx as nx
 
 
@@ -7,7 +8,7 @@ class RandomWalkBetweennessCentralitySolver:
         return current_flow_betweenness_centrality(g)
 
     def calculate(self, g):
-        components = nx.connected_component_subgraphs(g)
+        components = [g.subgraph(c).copy() for c in connected_components(g)]
 
         output = {}
 
