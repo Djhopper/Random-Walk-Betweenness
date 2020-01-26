@@ -34,6 +34,9 @@ def draw_graph(graph_name, metric=None):
     plt.title("Plot showing random walk betweenness\ncentrality of nodes in the " + graph_name)
 
 
+# TODO look into pgfplots
+
+
 if __name__ == '__main__':
     draw_graph("kite_graph", metric="random_walk_centrality")
     plt.show()
