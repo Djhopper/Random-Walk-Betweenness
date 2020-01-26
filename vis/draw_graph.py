@@ -2,7 +2,7 @@ import networkx as nx
 from graphs.read_write import read_graph
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from algorithms.random_walk_centrality.random_walk_centrality import random_walk_centrality
+from random_walk_centrality import random_walk_centrality
 import numpy as np
 
 

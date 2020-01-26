@@ -1,4 +1,4 @@
-from algorithms.random_walk_centrality.random_walk_centrality import random_walk_centrality
+from random_walk_centrality import random_walk_centrality
 from networkx.generators.random_graphs import random_lobster, erdos_renyi_graph
 from graphs.read_write import read_graph
 

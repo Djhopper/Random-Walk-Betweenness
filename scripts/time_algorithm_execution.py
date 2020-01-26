@@ -1,4 +1,4 @@
-from algorithms.random_walk_centrality.random_walk_centrality import random_walk_centrality
+from random_walk_centrality import random_walk_centrality
 from timeit import default_timer as timer
 from graphs.read_write import read_graph
 from graphs.random_graphs import get_erdos_renyi
