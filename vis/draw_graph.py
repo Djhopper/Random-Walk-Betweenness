@@ -2,7 +2,7 @@ import networkx as nx
 from graphs.read_write import read_graph
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from random_walk_centrality import calculate
+from random_walk_centrality.calculate import random_walk_centrality
 import numpy as np
 
 
@@ -10,7 +10,7 @@ def draw_graph(graph_name, metric=None):
     g = read_graph(graph_name)
 
     if metric == "random_walk_centrality":
-        color_by = calculate(g)
+        color_by = random_walk_centrality(g)
     else:
         raise NotImplementedError
 
