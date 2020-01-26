@@ -1,11 +1,11 @@
-from random_walk_centrality import calculate
+from random_walk_centrality.calculate import random_walk_centrality
 from networkx.generators.random_graphs import random_lobster, erdos_renyi_graph
 from graphs.read_write import read_graph
 
 
 def do_accuracy_test(g, method_name):
-    centrality1 = calculate(g, method="nx")
-    centrality2 = calculate(g, method=method_name)
+    centrality1 = random_walk_centrality(g, method="nx")
+    centrality2 = random_walk_centrality(g, method=method_name)
 
     centrality1 = dict((int(key), value) for key, value in centrality1.items())
     centrality2 = dict((int(key), value) for key, value in centrality2.items())
@@ -32,7 +32,7 @@ def test_erdos_renyi():
 
 
 def test_random_graphs():
-    for i in range(1):
+    for i in range(5):
         do_accuracy_test(random_lobster(20, 0.5, 0.1), "brandes_sparse")
         do_accuracy_test(random_lobster(20, 0.5, 0.1), "brandes_dense")
         do_accuracy_test(random_lobster(20, 0.5, 0.1), "brandes")
