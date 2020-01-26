@@ -1,4 +1,4 @@
-from random_walk_centrality import random_walk_centrality
+from random_walk_centrality import calculate
 from timeit import default_timer as timer
 from graphs.read_write import read_graph
 from graphs.random_graphs import get_erdos_renyi
@@ -22,7 +22,7 @@ def time_random_walk_centrality_algorithm(graph, method_name):
     start_calculation = timer()
 
     # Execute algorithm
-    result = random_walk_centrality(g, method=method_name)
+    result = calculate(g, method=method_name)
 
     end_calculation = timer()
 
