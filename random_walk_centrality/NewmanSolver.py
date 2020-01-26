@@ -7,7 +7,7 @@ from random_walk_centrality.RandomWalkBetweennessCentralitySolver import RandomW
 class NewmanSolver(RandomWalkBetweennessCentralitySolver):
     # Algorithm as described in 'A measure of betweenness centrality based on random walks',
     # M.E.J. Newman (2004)
-    def calculate(self, g):
+    def calculate_on_connected_graph(self, g):
         n = g.number_of_nodes()
 
         # Calculate Laplacian matrix

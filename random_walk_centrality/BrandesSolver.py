@@ -56,7 +56,7 @@ class BrandesSolver(RandomWalkBetweennessCentralitySolver):
 
     # Algorithm as described in 'Centrality Measures Based on Current Flow',
     # Ulrik Brandes and Daniel Fleischer (2005)
-    def calculate(self, g):
+    def calculate_on_connected_graph(self, g):
         n = g.number_of_nodes()
         nrange = np.arange(1, n + 1)
 
