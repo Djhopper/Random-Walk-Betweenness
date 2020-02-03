@@ -37,42 +37,59 @@ def time_random_walk_centrality_algorithm(graph, method_name):
 
 # Times given implementations on erdos-renyi graphs of gradually increasing sizes,
 # stopping when runtime exceeds max_time
-def time_on_erdos_renyi_graphs(methods, repeats=10, max_time=0.1, node_interval=50, average_degree=10, debug=False):
+def time_on_erdos_renyi_graphs(methods, repeats=10, max_time=None, max_nodes=None,
+                               node_interval=50, average_degree=10, debug=False):
+    assert max_time is not None or max_nodes is not None
+
     data = []
 
     nodes = 0
-    while len(methods) > 0:
+    while len(methods) > 0 and (max_nodes is None or nodes < max_nodes):
         nodes += node_interval
         if debug:
             print("Doing " + str(nodes) + " node graph using methods: ", methods)
 
-        g = get_erdos_renyi(nodes, average_degree)
-
-        for method in list(methods):
-            new_data = []
-            for i in range(repeats):
+        new_data = []
+        for i in range(repeats):
+            g = get_erdos_renyi(nodes, average_degree)
+            for method in list(methods):
                 new_data.append(time_random_walk_centrality_algorithm(g, method))
 
-            avg_time = np.mean([x["time"] for x in new_data])
-            if avg_time > max_time:
+        new_data = pd.DataFrame(new_data)
+
+        for method in list(methods):
+            avg_time = new_data[new_data["method_name"] == method]["time"].mean()
+            if max_time is not None and avg_time > max_time:
                 methods.remove(method)
 
-            data += new_data
+        data.append(new_data)
 
-    df = pd.DataFrame(data)
+    df = pd.concat(data)
     return df
 
 
 def plot_brande_on_erdos_renyi():
-    df = time_on_erdos_renyi_graphs(["nx"], 1, 80, 250, 10, False)[["nodes", "edges", "time"]]
+    df = time_on_erdos_renyi_graphs(
+        methods=["nx"],
+        repeats=1,
+        max_time=80,
+        node_interval=250,
+        average_degree=10,
+        debug=False
+    )[["nodes", "edges", "time"]]
     sns.scatterplot(x="nodes", y="time", data=df)
     plt.show()
 
 
 if __name__ == '__main__':
-    plot_brande_on_erdos_renyi()
-    quit()
-
-    df = time_on_erdos_renyi_graphs(["nx", "brandes", "newman"], debug=True)
-    df.to_csv("betweenness_algorithm_speeds_on_sparse_erdos_renyi_graphs.csv", index=False)
+    df = time_on_erdos_renyi_graphs(
+        methods=["nx", "brandes"],
+        repeats=100,
+        max_time=None,
+        max_nodes=1000,
+        node_interval=100,
+        average_degree=10,
+        debug=False
+    )
+    df.to_csv("presentation_fig2_data.csv", index=False)
     print(df)
