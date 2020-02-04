@@ -6,7 +6,7 @@ from random_walk_centrality.calculate import random_walk_centrality
 import numpy as np
 
 
-def draw_graph(graph_name, metric=None):
+def draw_graph(graph_name, metric=None, labels=False):
     g = read_graph(graph_name)
 
     if metric == "random_walk_centrality":
@@ -19,8 +19,11 @@ def draw_graph(graph_name, metric=None):
     cmap = cm.Blues
     pos = nx.drawing.layout.spring_layout(g)
     # Plot nodes
-    nodes = nx.draw_networkx_nodes(g, node_color=node_color, cmap=cmap, pos=pos)
+    nodes = nx.draw_networkx_nodes(g, node_color=node_color, cmap=cmap, pos=pos, label=True)
     nodes.set_edgecolor("grey")
+    # Plot labels
+    if labels:
+        nx.draw_networkx_labels(g, pos=pos)
     # Plot edges
     nx.draw_networkx_edges(g, pos=pos, edge_color="gray")
     # Add legend (colour scale)
@@ -38,5 +41,5 @@ def draw_graph(graph_name, metric=None):
 
 
 if __name__ == '__main__':
-    draw_graph("kite_graph", metric="random_walk_centrality")
+    draw_graph("kite_graph", metric="random_walk_centrality", labels=True)
     plt.show()
