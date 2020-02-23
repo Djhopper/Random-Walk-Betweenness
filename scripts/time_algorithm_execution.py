@@ -83,7 +83,7 @@ def plot_brande_on_erdos_renyi():
 
 if __name__ == '__main__':
     print(time_random_walk_centrality_algorithm("erdos_renyi", "approx"))
-    print(time_random_walk_centrality_algorithm("erdos_renyi", "brandes"))
+    print(time_random_walk_centrality_algorithm("erdos_renyi", "nxapprox"))
     '''
     df = time_on_erdos_renyi_graphs(
         methods=["nx", "brandes"],

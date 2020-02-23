@@ -15,7 +15,7 @@ def source_sink_array(i, j, n):
 
 
 class ApproxSolver(RandomWalkBetweennessCentralitySolver):
-    def __init__(self, epsilon=0.05, p=0.05):
+    def __init__(self, epsilon=0.05, p=None):
         self.epsilon = epsilon
         self.p = p
 
@@ -25,7 +25,11 @@ class ApproxSolver(RandomWalkBetweennessCentralitySolver):
         n = g.number_of_nodes()
         b = np.zeros(n)
 
-        l = np.log(2/self.p) / (2 * np.log(n))
+        if self.p is None:
+            l = 1
+        else:
+            l = np.log(2/self.p) / (2 * np.log(n))
+
         c_star = n / (n - 2)
         k = int(l * np.ceil(((c_star / self.epsilon)**2) * np.log(n)))
 
