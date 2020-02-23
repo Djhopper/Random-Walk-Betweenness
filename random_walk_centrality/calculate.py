@@ -2,10 +2,11 @@ from random_walk_centrality.RandomWalkBetweennessCentralitySolver import RandomW
 from random_walk_centrality.NewmanSolver import NewmanSolver
 from random_walk_centrality.BrandesSolver import BrandesSolver, BrandesSolverSparse, BrandesSolverDense
 from random_walk_centrality.ApproxSolver import ApproxSolver
+from random_walk_centrality.NXApproxSolver import NXApproxSolver
 from graphs.read_write import read_graph
 
 
-method_names = ["nx", "newman", "brandes", "brandes_dense", "brandes_sparse", "approx"]
+method_names = ["nx", "newman", "brandes", "brandes_dense", "brandes_sparse", "approx", "nxapprox"]
 
 
 def random_walk_centrality(g, method="nx"):
@@ -23,6 +24,8 @@ def random_walk_centrality(g, method="nx"):
         solver = BrandesSolverDense()
     if method == "approx":
         solver = ApproxSolver()
+    if method == "nxapprox":
+        solver = NXApproxSolver()
 
     return solver.calculate(g)
 

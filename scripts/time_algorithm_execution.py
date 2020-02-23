@@ -82,6 +82,9 @@ def plot_brande_on_erdos_renyi():
 
 
 if __name__ == '__main__':
+    print(time_random_walk_centrality_algorithm("erdos_renyi", "approx"))
+    print(time_random_walk_centrality_algorithm("erdos_renyi", "brandes"))
+    '''
     df = time_on_erdos_renyi_graphs(
         methods=["nx", "brandes"],
         repeats=100,
@@ -93,3 +96,4 @@ if __name__ == '__main__':
     )
     df.to_csv("presentation_fig2_data.csv", index=False)
     print(df)
+    '''

@@ -16,4 +16,4 @@ def get_erdos_renyi(n, average_degree):
 
 
 if __name__ == '__main__':
-    generate_erdos_renyi(100, 0.1, "erdos_renyi")
+    generate_erdos_renyi(500, 0.1, "erdos_renyi")

@@ -5,7 +5,7 @@ import seaborn as sns
 
 if __name__ == '__main__':
     df = pd.read_csv(r"C:\Users\Dan\PycharmProjects\Random-Walk-Betweenness\scripts\presentation_fig2_data.csv")
-    #df = df[df["method_name"] == "nx"]
+    df["method_name"] = df["method_name"].apply(lambda x: "my implementation" if x == "brandes" else "existing implementation")
     df = df[df["nodes"] % 100 == 0]
 
     ax = sns.pointplot(
@@ -22,4 +22,3 @@ if __name__ == '__main__':
     )
 
     plt.show()
-    plt.savefig("presentation_fig2.png")
