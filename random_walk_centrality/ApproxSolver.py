@@ -2,7 +2,6 @@ import numpy as np
 import networkx as nx
 from random_walk_centrality.helper_functions import construct_diag_node_degrees, remove_row_and_column
 from random_walk_centrality.RandomWalkBetweennessCentralitySolver import RandomWalkBetweennessCentralitySolver
-from networkx.algorithms.centrality import approximate_current_flow_betweenness_centrality
 import random
 import scipy
 
@@ -35,6 +34,7 @@ class ApproxSolver(RandomWalkBetweennessCentralitySolver):
 
         L = remove_row_and_column(construct_diag_node_degrees(g) - nx.adjacency_matrix(g), 0)
         spilu = scipy.sparse.linalg.spilu(scipy.sparse.csc_matrix(L))
+        edges = np.array(list(g.edges)).transpose()
 
         for _ in range(k):
             s = random.randint(0, n-1)
@@ -44,12 +44,9 @@ class ApproxSolver(RandomWalkBetweennessCentralitySolver):
             p = spilu.solve(source_sink_array(s, t, n)[1:])
             p = np.insert(p, 0, 0)
 
-            for (v, w) in g.edges:
-                val = abs(p[v] - p[w])
-                if v not in (s, t):
-                    b[v] += val
-                if w not in (s, t):
-                    b[w] += val
+            val = np.abs(p[edges[0]] - p[edges[1]])
+            b[edges[0]] += np.where((edges[0] == s) | (edges[0] == t), 0, val)
+            b[edges[1]] += np.where((edges[1] == s) | (edges[1] == t), 0, val)
 
         b *= c_star / (2 * k)
         # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
