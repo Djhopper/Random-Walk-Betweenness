@@ -1,7 +1,7 @@
 import networkx as nx
 from scipy.sparse import linalg
 import numpy as np
-from tests.timing_bench import TimeMachine
+from scripts.timing_bench import TimeMachine
 from graphs.random_graphs import get_erdos_renyi
 
 
