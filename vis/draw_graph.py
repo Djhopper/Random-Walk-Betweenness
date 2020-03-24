@@ -2,14 +2,14 @@ import networkx as nx
 from graphs.read_write import read_graph
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from random_walk_centrality.calculate import random_walk_centrality
+from random_walk_betweenness.calculate import random_walk_centrality
 import numpy as np
 
 
 def draw_graph(graph_name, metric=None, labels=False):
     g = read_graph(graph_name)
 
-    if metric == "random_walk_centrality":
+    if metric == "random_walk_betweenness":
         color_by = random_walk_centrality(g)
     else:
         raise NotImplementedError
@@ -41,5 +41,5 @@ def draw_graph(graph_name, metric=None, labels=False):
 
 
 if __name__ == '__main__':
-    draw_graph("kite_graph", metric="random_walk_centrality", labels=True)
+    draw_graph("kite_graph", metric="random_walk_betweenness", labels=True)
     plt.show()

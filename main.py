@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from graphs.read_write import get_all_existing_graph_names, read_graph
-from random_walk_centrality.calculate import method_names
+from random_walk_betweenness.calculate import method_names
 from scripts.time_algorithm_execution import time_random_walk_centrality_algorithm
 
 

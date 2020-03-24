@@ -1,8 +1,8 @@
 from timeit import default_timer as timer
 import numpy as np
 import networkx as nx
-from random_walk_centrality.helper_functions import construct_diag_node_degrees, remove_row_and_column
-from random_walk_centrality.RandomWalkBetweennessCentralitySolver import RandomWalkBetweennessCentralitySolver
+from random_walk_betweenness.helper_functions import construct_diag_node_degrees, remove_row_and_column
+from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
 import random
 import scipy
 import pandas as pd

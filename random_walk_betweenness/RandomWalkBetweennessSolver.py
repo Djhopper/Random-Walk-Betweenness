@@ -3,7 +3,7 @@ from networkx.algorithms.components import connected_components
 import networkx as nx
 
 
-class RandomWalkBetweennessCentralitySolver:
+class RandomWalkBetweennessSolver:
     def calculate_on_connected_graph(self, g):
         return current_flow_betweenness_centrality(g)
 

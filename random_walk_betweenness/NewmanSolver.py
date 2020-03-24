@@ -1,10 +1,10 @@
 import numpy as np
 import networkx as nx
-from random_walk_centrality.helper_functions import construct_diag_node_degrees, remove_row_and_column
-from random_walk_centrality.RandomWalkBetweennessCentralitySolver import RandomWalkBetweennessCentralitySolver
+from random_walk_betweenness.helper_functions import construct_diag_node_degrees, remove_row_and_column
+from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
 
 
-class NewmanSolver(RandomWalkBetweennessCentralitySolver):
+class NewmanSolver(RandomWalkBetweennessSolver):
     # Algorithm as described in 'A measure of betweenness centrality based on random walks',
     # M.E.J. Newman (2004)
     def calculate_on_connected_graph(self, g):

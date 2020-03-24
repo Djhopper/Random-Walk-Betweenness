@@ -2,8 +2,8 @@ import numpy as np
 import networkx as nx
 from scipy.stats import rankdata
 from scipy.sparse import linalg
-from random_walk_centrality.helper_functions import construct_diag_node_degrees, remove_row_and_column
-from random_walk_centrality.RandomWalkBetweennessCentralitySolver import RandomWalkBetweennessCentralitySolver
+from random_walk_betweenness.helper_functions import construct_diag_node_degrees, remove_row_and_column
+from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
 
 
 # B(v,e) = 1 if e = (v,w), -1 if e = (w, v), 0 otherwise
@@ -50,7 +50,7 @@ def construct_C(g, n, sparse):
         return T
 
 
-class BrandesSolver(RandomWalkBetweennessCentralitySolver):
+class BrandesSolver(RandomWalkBetweennessSolver):
     def __init__(self):
         self.sparse = False
 

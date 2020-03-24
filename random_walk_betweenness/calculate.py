@@ -1,8 +1,8 @@
-from random_walk_centrality.RandomWalkBetweennessCentralitySolver import RandomWalkBetweennessCentralitySolver
-from random_walk_centrality.NewmanSolver import NewmanSolver
-from random_walk_centrality.BrandesSolver import BrandesSolver, BrandesSolverSparse, BrandesSolverDense
-from random_walk_centrality.ApproxSolver import ApproxSolver
-from random_walk_centrality.NXApproxSolver import NXApproxSolver
+from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
+from random_walk_betweenness.NewmanSolver import NewmanSolver
+from random_walk_betweenness.BrandesSolver import BrandesSolver, BrandesSolverSparse, BrandesSolverDense
+from random_walk_betweenness.ApproxSolver import ApproxSolver
+from random_walk_betweenness.NXApproxSolver import NXApproxSolver
 from graphs.read_write import read_graph
 
 
@@ -13,7 +13,7 @@ def random_walk_centrality(g, method="nx"):
     assert method in method_names
 
     if method == "nx":
-        solver = RandomWalkBetweennessCentralitySolver()
+        solver = RandomWalkBetweennessSolver()
     if method == "newman":
         solver = NewmanSolver()
     if method == "brandes":
