@@ -50,11 +50,11 @@ def get_data():
             data.append(do_test(n))
     df = pd.DataFrame(data)
     df.drop(columns="_", inplace=True)
-    df.to_csv("spilu_inversion/data3.csv", index=False)
+    df.to_csv("spilu_inversion/data.csv", index=False)
 
 
 def get_analysis():
-    df = pd.read_csv("spilu_inversion/data3.csv").dropna()
+    df = pd.read_csv("spilu_inversion/data.csv").dropna()
     df["n"] = df["n"].round(decimals=-3)
 
     data = []
@@ -83,7 +83,7 @@ def get_analysis():
         })
 
     df_out = pd.DataFrame(data)
-    df_out.to_csv("spilu_inversion/spilu_analysis3.csv", index=False)
+    df_out.to_csv("spilu_inversion/spilu_analysis.csv", index=False)
 
 
 if __name__ == '__main__':
