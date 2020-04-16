@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from graphs.read_write import get_all_existing_graph_names, read_graph
-from random_walk_betweenness.calculate import method_names
+from random_walk_betweenness.calculate import random_walk_betweenness_strategies
 from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
 
 
@@ -12,11 +12,12 @@ def main():
 
         print("Select a graph by inputting a number:")
         for i, name in enumerate(graph_names):
-            print(i, "-", name,
-                  "(", read_graph(name).number_of_nodes(), "nodes,", read_graph(name).number_of_edges(), "edges )")
+            print(i, "-", name,)
+                  #"(", read_graph(name).number_of_nodes(), "nodes,", read_graph(name).number_of_edges(), "edges )")
 
         graph_name = graph_names[int(input())]
 
+        method_names = list(random_walk_betweenness_strategies.keys())
         print("Select a method by inputting a number:")
         for i, name in enumerate(method_names):
             print(i, "-", name)

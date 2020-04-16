@@ -21,25 +21,14 @@ def do_test(n):
     n = g.number_of_nodes()
     M = nx.linalg.laplacianmatrix.laplacian_matrix(g).tolil()
     M = M[list(range(1, n)), :]
-    M = M[:, list(range(1, n))].tocsc()
+    M = M[:, list(range(1, n))]
 
     tm = TimeMachine()
-    # Do partial LU decomposition method
-    inverse = linalg.spilu(M).solve(np.identity(n - 1))
-    tm.time("spilu")
 
-    M = M.todense()
-    tm.time("__")
-
-    # Do standard inversion
-    inverse = M.I
-    tm.time("matrix")
-
-    M = np.array(M)
-    tm.time("_")
-
-    inverse = np.linalg.inv(M)
-    tm.time("array")
+    N = np.array(M)
+    tm.time("matrix_to_array")
+    K = np.asmatrix(N)
+    tm.time("array_to_matrix")
 
     data = tm.get_data()
     data["n"] = n

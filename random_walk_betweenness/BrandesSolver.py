@@ -20,6 +20,7 @@ def construct_B(g, n):
 
 # C as given in equation (1)
 def construct_C(g, n, sparse):
+    # TODO try incomplete cholesky decomposition
     if sparse:  # Make use of sparse matrix methods
         # Get Laplacian
         M = nx.linalg.laplacianmatrix.laplacian_matrix(g).tolil()

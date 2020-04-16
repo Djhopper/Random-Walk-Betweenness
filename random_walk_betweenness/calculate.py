@@ -1,36 +1,23 @@
 from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
 from random_walk_betweenness.NewmanSolver import NewmanSolver
-from random_walk_betweenness.BrandesSolver import BrandesSolver, BrandesSolverSparse, BrandesSolverDense
+from random_walk_betweenness.BrandesSolver import BrandesSolver
 from random_walk_betweenness.ApproxSolver import ApproxSolver
 from random_walk_betweenness.NXApproxSolver import NXApproxSolver
-from graphs.read_write import read_graph
 
 
-method_names = ["nx", "newman", "brandes", "brandes_dense", "brandes_sparse", "approx", "nxapprox"]
+random_walk_betweenness_strategies = {
+    "nx": RandomWalkBetweennessSolver(),
+    "newman": NewmanSolver(),
+    "brandes": BrandesSolver(),
+    "approx": ApproxSolver(),
+    "nxapprox": NXApproxSolver(),
+}
 
 
-def random_walk_centrality(g, method="nx"):
-    assert method in method_names
+def random_walk_centrality(g, strategy="nx"):
+    if strategy not in random_walk_betweenness_strategies:
+        raise ValueError("You must pick one of the following strategies: "
+                         + str(list(random_walk_betweenness_strategies.keys())))
 
-    if method == "nx":
-        solver = RandomWalkBetweennessSolver()
-    if method == "newman":
-        solver = NewmanSolver()
-    if method == "brandes":
-        solver = BrandesSolver()
-    if method == "brandes_sparse":
-        solver = BrandesSolverSparse()
-    if method == "brandes_dense":
-        solver = BrandesSolverDense()
-    if method == "approx":
-        solver = ApproxSolver()
-    if method == "nxapprox":
-        solver = NXApproxSolver()
-
+    solver = random_walk_betweenness_strategies[strategy]
     return solver.calculate(g)
-
-
-if __name__ == '__main__':
-    g = read_graph("kite_graph")
-    print(random_walk_centrality(g, method="nx"))
-    print(random_walk_centrality(g, method="approx"))

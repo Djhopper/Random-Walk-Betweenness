@@ -6,7 +6,7 @@ from random_walk_betweenness.calculate import random_walk_centrality
 import numpy as np
 
 
-def draw_graph(graph_name, metric=None, labels=False):
+def draw_graph(graph_name, metric="random_walk_betweenness", labels=False):
     g = read_graph(graph_name)
 
     if metric == "random_walk_betweenness":
@@ -30,14 +30,11 @@ def draw_graph(graph_name, metric=None, labels=False):
     sm = cm.ScalarMappable(cmap=cmap)
     sm.set_array(np.array([0, 1]))
     cbar = plt.colorbar(sm)
-    cbar.ax.set_ylabel('Random Walk Betweenness Centrality', rotation=270)
+    cbar.ax.set_ylabel('Random Walk Betweenness', rotation=270)
     cbar.set_ticks(np.array([0, 1]))
     # Disable axis, add title
     plt.axis('off')
-    plt.title("Plot showing random walk betweenness\ncentrality of nodes in the " + graph_name)
-
-
-# TODO look into pgfplots
+    #plt.title("Plot showing random walk betweenness\ncentrality of nodes in the " + graph_name)
 
 
 if __name__ == '__main__':

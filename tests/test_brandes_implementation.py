@@ -4,8 +4,8 @@ from graphs.read_write import read_graph
 
 
 def do_accuracy_test(g, method_name):
-    centrality1 = random_walk_centrality(g, method="nx")
-    centrality2 = random_walk_centrality(g, method=method_name)
+    centrality1 = random_walk_centrality(g, strategy="nx")
+    centrality2 = random_walk_centrality(g, strategy=method_name)
 
     centrality1 = dict((int(key), value) for key, value in centrality1.items())
     centrality2 = dict((int(key), value) for key, value in centrality2.items())

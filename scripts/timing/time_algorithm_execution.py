@@ -22,7 +22,7 @@ def time_random_walk_centrality_algorithm(graph, method_name):
     start_calculation = timer()
 
     # Execute algorithm
-    result = random_walk_centrality(g, method=method_name)
+    result = random_walk_centrality(g, strategy=method_name)
 
     end_calculation = timer()
 

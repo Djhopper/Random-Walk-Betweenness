@@ -51,3 +51,22 @@ class ApproxSolver(RandomWalkBetweennessSolver):
         b *= c_star / (2 * k)
         # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
         return dict(zip(range(n), b))
+
+
+
+
+
+if __name__ == '__main__':
+    from scripts.vis.draw_graph import draw_graph
+    import matplotlib.pyplot as plt
+    from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
+    from random_walk_betweenness.NXApproxSolver import NXApproxSolver
+    g = nx.Graph()
+    g.add_nodes_from(['A', 'B', 'C', 'D', 'E'])
+    g.add_edges_from([['A', 'B'], ['A', 'D'], ['B', 'C'], ['C', 'D'], ['B', 'E'], ['D', 'E']])
+
+    res = NXApproxSolver().calculate(g)
+    print(res)
+    print(RandomWalkBetweennessSolver().calculate(g))
+    draw_graph(g, labels=True)
+    plt.show()
