@@ -20,28 +20,29 @@ class ApproxSolver(RandomWalkBetweennessSolver):
     # Ulrik Brandes and Daniel Fleischer (2005)
     def calculate_on_connected_graph(self, g):
         n = g.number_of_nodes()
-        B = np.zeros(n)
 
+        # Initialise constants
         l = 1
         c_star = n / (n - 2)
         k = int(l * np.ceil(((c_star / self.epsilon)**2) * np.log(n)))
 
-        n = g.number_of_nodes()
-        # Get laplacian of g (without first row and column)
-        L = nx.linalg.laplacian_matrix(g)[1:, 1:].todense()
-
+        L = nx.linalg.laplacian_matrix(g)[1:, 1:].todense()  # Laplacian of g without first row and column
         spilu = scipy.sparse.linalg.spilu(scipy.sparse.csc_matrix(L))
         v, w = np.array(list(g.edges)).transpose()
 
+        B = np.zeros(n)  # initialise betweennesses to 0
         for _ in range(k):
+            # Select s != t uniformly at random
             s = random.randint(0, n-1)
             t = random.randint(0, n-2)
             t += 1 if t >= s else 0
 
+            # Solve Lp = b
             b = source_sink_array(s, t, n)
             p = np.zeros(n)
             p[1:] = spilu.solve(b[1:])
 
+            # Increment betweennesses
             val = np.abs(p[v] - p[w])
             np.add.at(B, v, np.where((v != s) & (v != t), val, 0))
             np.add.at(B, w, np.where((w != s) & (w != t), val, 0))
