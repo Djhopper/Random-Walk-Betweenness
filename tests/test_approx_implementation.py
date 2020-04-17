@@ -4,19 +4,23 @@ from graphs.read_write import read_graph
 
 
 def do_accuracy_test(g):
+    acceptable_error = 0.05
     centrality1 = random_walk_centrality(g, strategy="nx")
-    centrality2 = random_walk_centrality(g, strategy="brandes")
+    centrality2 = random_walk_centrality(g, strategy="approx", epsilon=acceptable_error)
 
     centrality1 = dict((int(key), value) for key, value in centrality1.items())
     centrality2 = dict((int(key), value) for key, value in centrality2.items())
 
     assert centrality1.keys() == centrality2.keys()
 
-    acceptable_error = 0.001
+    count = 0
     for node in centrality1.keys():
         x = centrality1[node]
         y = centrality2[node]
-        assert y - acceptable_error <= x <= y + acceptable_error
+        if not(y - acceptable_error <= x <= y + acceptable_error):
+            count += 1
+
+    assert count < 0.99 * len(centrality1)
 
 
 def test_bull_graph():

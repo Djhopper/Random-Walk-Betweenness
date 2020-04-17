@@ -6,18 +6,22 @@ from random_walk_betweenness.NXApproxSolver import NXApproxSolver
 
 
 random_walk_betweenness_strategies = {
-    "nx": RandomWalkBetweennessSolver(),
-    "newman": NewmanSolver(),
-    "brandes": BrandesSolver(),
-    "approx": ApproxSolver(),
-    "nxapprox": NXApproxSolver(),
+    "nx": RandomWalkBetweennessSolver,
+    "newman": NewmanSolver,
+    "brandes": BrandesSolver,
+    "approx": ApproxSolver,
+    "nxapprox": NXApproxSolver,
 }
 
 
-def random_walk_centrality(g, strategy="nx"):
+def random_walk_centrality(g, strategy="nx", epsilon=None):
     if strategy not in random_walk_betweenness_strategies:
         raise ValueError("You must pick one of the following strategies: "
                          + str(list(random_walk_betweenness_strategies.keys())))
 
-    solver = random_walk_betweenness_strategies[strategy]
+    if epsilon is None:
+        solver = random_walk_betweenness_strategies[strategy]()
+    else:
+        solver = random_walk_betweenness_strategies[strategy](epsilon)
+
     return solver.calculate(g)
