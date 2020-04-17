@@ -26,7 +26,7 @@ class ApproxSolver(RandomWalkBetweennessSolver):
         c_star = n / (n - 2)
         k = int(l * np.ceil(((c_star / self.epsilon)**2) * np.log(n)))
 
-        L = nx.linalg.laplacian_matrix(g)[1:, 1:].todense()  # Laplacian of g without first row and column
+        L = nx.linalg.laplacian_matrix(g)[1:, 1:]  # Laplacian of g without first row and column
         spilu = scipy.sparse.linalg.spilu(scipy.sparse.csc_matrix(L))
         v, w = np.array(list(g.edges)).transpose()
 
