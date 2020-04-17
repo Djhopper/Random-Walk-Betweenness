@@ -82,8 +82,9 @@ def plot_brande_on_erdos_renyi():
 
 
 if __name__ == '__main__':
-    print(time_random_walk_centrality_algorithm("email-Eu-core.txt", "approx"))
-    print(time_random_walk_centrality_algorithm("email-Eu-core.txt", "brandes"))
+    g = get_erdos_renyi(300, 10)
+    print(time_random_walk_centrality_algorithm(g, "nx"))
+    print(time_random_walk_centrality_algorithm(g, "newman"))
     '''
     df = time_on_erdos_renyi_graphs(
         methods=["nx", "brandes"],

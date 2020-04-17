@@ -20,23 +20,14 @@ def do_accuracy_test(g, method_name):
 
 
 def test_bull_graph():
-    do_accuracy_test(read_graph("bull_graph"), "brandes_sparse")
-    do_accuracy_test(read_graph("bull_graph"), "brandes_dense")
     do_accuracy_test(read_graph("bull_graph"), "brandes")
 
 
 def test_erdos_renyi():
-    do_accuracy_test(read_graph("erdos_renyi"), "brandes_sparse")
-    do_accuracy_test(read_graph("erdos_renyi"), "brandes_dense")
     do_accuracy_test(read_graph("erdos_renyi"), "brandes")
 
 
 def test_random_graphs():
     for i in range(5):
-        do_accuracy_test(random_lobster(20, 0.5, 0.1), "brandes_sparse")
-        do_accuracy_test(random_lobster(20, 0.5, 0.1), "brandes_dense")
         do_accuracy_test(random_lobster(20, 0.5, 0.1), "brandes")
-        do_accuracy_test(erdos_renyi_graph(30, 0.3), "brandes_sparse")
-        do_accuracy_test(erdos_renyi_graph(30, 0.3), "brandes_dense")
-        do_accuracy_test(erdos_renyi_graph(30, 0.3), "brandes")
         do_accuracy_test(erdos_renyi_graph(30, 0.3), "brandes")

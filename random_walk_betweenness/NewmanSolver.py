@@ -1,54 +1,28 @@
 import numpy as np
-import networkx as nx
-from random_walk_betweenness.helper_functions import construct_diag_node_degrees, remove_row_and_column
+from random_walk_betweenness.helper_functions import construct_newman_T_matrix
 from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
+from itertools import combinations
 
 
 class NewmanSolver(RandomWalkBetweennessSolver):
-    # Algorithm as described in 'A measure of betweenness centrality based on random walks',
+    # Implements algorithm described in 'A measure of betweenness centrality based on random walks',
     # M.E.J. Newman (2004)
     def calculate_on_connected_graph(self, g):
         n = g.number_of_nodes()
 
-        # Calculate Laplacian matrix
+        T = construct_newman_T_matrix(g)
 
-        D = construct_diag_node_degrees(g)
-        A = nx.adjacency_matrix(g)
-        L = D - A
-
-        # Calculate matrix T
-
-        # Remove last row and column
-        M = remove_row_and_column(L, n-1)
-        # Invert remaining matrix
-        M = M.I
-        # Add back the last row and column with all 0s
-        M = np.hstack((M, np.zeros((n-1, 1))))
-        M = np.vstack((M, np.zeros((1, n))))
-        # Convert from matrix to array
-        T = np.squeeze(np.asarray(M))
-
-        # Sum up betweenness for each node
-        b = [0 for _ in range(n)]  # Betweenness
-
+        s, t = np.array(list(combinations(np.arange(n), 2))).transpose()  # Find all pairs s<t
+        b = np.zeros(n)  # Initialise array of betweennesses
         for i, j in g.edges:
 
-            # Vi(s,t) = T(i,s) - T(i,t)
-            temp = np.array([T[i] for _ in range(n)])  # temp(_,s) = T(i,s)
-            Vi = temp.transpose() - temp
-            # Vj(s,t) = T(j,s) - T(j,t)
-            temp = np.array([T[j] for _ in range(n)])  # temp(_,s) = T(j,s)
-            Vj = temp.transpose() - temp
+            B = np.abs(T[i, s] - T[i, t] - T[j, s] + T[j, t])
 
-            # B(s,t) = |T(i,s) - T(i,t) - T(j,s) + T(j,t)|
-            B = np.abs(Vi - Vj)
+            # Exclude values where (i =/= s,t) in equation (9)
+            b[i] += np.sum(B[(s != i) & (t != i)])
+            b[j] += np.sum(B[(s != j) & (t != j)])
 
-            # Remove rows/columns to allow for the condition (i =/= s,t) in equation (9)
-            b[i] += np.sum(remove_row_and_column(B, i))
-            b[j] += np.sum(remove_row_and_column(B, j))
-
-        b = [x / (2 * (n-1)*(n-2)) for x in b]
+        b /= ((n-1)*(n-2))  # normalise
 
         # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
         return dict(zip(range(n), b))
-
