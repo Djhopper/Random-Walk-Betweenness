@@ -44,8 +44,8 @@ class ApproxSolver(RandomWalkBetweennessSolver):
 
             # Increment betweennesses
             val = np.abs(p[v] - p[w])
-            np.add.at(B, v, np.where((v != s) & (v != t), val, 0))
-            np.add.at(B, w, np.where((w != s) & (w != t), val, 0))
+            B += np.bincount(v, np.where((v != s) & (v != t), val, 0), minlength=B.size)
+            B += np.bincount(w, np.where((w != s) & (w != t), val, 0), minlength=B.size)
 
         B *= c_star / (2 * k)
         # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)

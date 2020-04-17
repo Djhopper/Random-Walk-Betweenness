@@ -1,11 +1,8 @@
 from timeit import default_timer as timer
 import numpy as np
 import networkx as nx
-from random_walk_betweenness.helper_functions import construct_diag_node_degrees, remove_row_and_column
-from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
 import random
 import scipy
-import pandas as pd
 
 
 def source_sink_array(i, j, n):
@@ -35,18 +32,16 @@ class TimeMachine:
         return self.times
 
 
-def calculate_on_connected_graph(self, g):
+def calculate_on_connected_graph(g):
     tm = TimeMachine()
     n = g.number_of_nodes()
 
     # Initialise constants
     l = 1
     c_star = n / (n - 2)
-    k = int(l * np.ceil(((c_star / self.epsilon) ** 2) * np.log(n)))
-    tm.time("_")
+    k = int(l * np.ceil(((c_star / 0.05) ** 2) * np.log(n)))
 
-    L = nx.linalg.laplacian_matrix(g)[1:, 1:].todense()  # Laplacian of g without first row and column
-    tm.time("laplacian")
+    L = nx.linalg.laplacian_matrix(g)[1:, 1:]  # Laplacian of g without first row and column
     spilu = scipy.sparse.linalg.spilu(scipy.sparse.csc_matrix(L))
     v, w = np.array(list(g.edges)).transpose()
 
@@ -64,18 +59,17 @@ def calculate_on_connected_graph(self, g):
 
         # Increment betweennesses
         val = np.abs(p[v] - p[w])
-        np.add.at(B, v, np.where((v != s) & (v != t), val, 0))
-        np.add.at(B, w, np.where((w != s) & (w != t), val, 0))
+
+        B += np.bincount(v, np.where((v != s) & (v != t), val, 0), minlength=B.size)
+        B += np.bincount(w, np.where((w != s) & (w != t), val, 0), minlength=B.size)
 
     B *= c_star / (2 * k)
+    tm.time("total")
     # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
-    return dict(zip(range(n), B))
+    return tm.get_data()
 
 
 if __name__ == '__main__':
     from graphs.random_graphs import get_erdos_renyi
-    g = get_erdos_renyi(10000, 10)
-    start = timer()
-    print(calculate_on_connected_graph(g, 0.05))
-    end = timer()
-    print(end-start)
+    g = get_erdos_renyi(2000, 10)
+    print(calculate_on_connected_graph(g))
