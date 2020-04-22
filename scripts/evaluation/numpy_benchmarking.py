@@ -1,5 +1,5 @@
 import numpy as np
-from scripts.timing.timing_bench import TimeMachine
+from scripts.timing.Profiler import Profiler
 import pandas as pd
 from scipy.stats import sem
 
@@ -8,11 +8,11 @@ def testAbs(n):
     x = [-10 for _ in range(n)]
     y = np.array(x)
 
-    tm = TimeMachine()
+    tm = Profiler()
     x1 = [abs(i) for i in x]
-    tm.time("builtin")
+    tm.mark("builtin")
     y1 = np.abs(y)
-    tm.time("numpy")
+    tm.mark("numpy")
     return tm
 
 
@@ -20,11 +20,11 @@ def testSum(n):
     x = [2 for _ in range(n)]
     y = np.array(x)
 
-    tm = TimeMachine()
+    tm = Profiler()
     x1 = sum(x)
-    tm.time("builtin")
+    tm.mark("builtin")
     y1 = np.sum(y)
-    tm.time("numpy")
+    tm.mark("numpy")
     return tm
 
 
@@ -32,11 +32,11 @@ def testWhere(n):
     x = [2 for _ in range(n)]
     y = np.array(x)
 
-    tm = TimeMachine()
+    tm = Profiler()
     x1 = [i*i if i > 0 else 0 for i in x]
-    tm.time("builtin")
+    tm.mark("builtin")
     y1 = np.where(y > 0, y*y, 0)
-    tm.time("numpy")
+    tm.mark("numpy")
     return tm
 
 

@@ -1,7 +1,7 @@
 import networkx as nx
 from scipy.sparse import linalg
 import numpy as np
-from scripts.timing.timing_bench import TimeMachine
+from scripts.timing.Profiler import Profiler
 from graphs.random_graphs import get_erdos_renyi
 import pandas as pd
 from scipy.stats import sem
@@ -23,12 +23,12 @@ def do_test(n):
     M = M[list(range(1, n)), :]
     M = M[:, list(range(1, n))]
 
-    tm = TimeMachine()
+    tm = Profiler()
 
     N = np.array(M)
-    tm.time("matrix_to_array")
+    tm.mark("matrix_to_array")
     K = np.asmatrix(N)
-    tm.time("array_to_matrix")
+    tm.mark("array_to_matrix")
 
     data = tm.get_data()
     data["n"] = n

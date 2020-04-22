@@ -1,10 +1,11 @@
 import networkx as nx
 from scipy.sparse import linalg
 import numpy as np
-from scripts.timing.timing_bench import TimeMachine
+from scripts.timing.Profiler import Profiler
 from graphs.random_graphs import get_erdos_renyi
 import pandas as pd
 from scipy.stats import sem
+import scipy
 
 
 '''
@@ -20,26 +21,31 @@ def do_test(n):
     # Setup (create matrix that needs to be inverted)
     n = g.number_of_nodes()
     M = nx.linalg.laplacianmatrix.laplacian_matrix(g).tolil()
-    M = M[list(range(1, n)), :]
-    M = M[:, list(range(1, n))].tocsc()
+    M = M[1:, 1:].tocsc()
 
-    tm = TimeMachine()
+    tm = Profiler()
     # Do partial LU decomposition method
     inverse = linalg.spilu(M).solve(np.identity(n - 1))
-    tm.time("spilu")
+    tm.mark("spilu")
+
+    # I'm dumb
+    spilu = linalg.spilu(M)
+    precond = linalg.LinearOperator(shape=(n-1, n-1), matvec=spilu.solve)
+    inverse = linalg.cg(M, np.identity(n-1)[0], M=precond)[0]
+    tm.mark("1 row of CGM")
 
     M = M.todense()
-    tm.time("__")
+    tm.mark("__")
 
     # Do standard inversion
     inverse = M.I
-    tm.time("matrix")
+    tm.mark("matrix")
 
     M = np.array(M)
-    tm.time("_")
+    tm.mark("_")
 
     inverse = np.linalg.inv(M)
-    tm.time("array")
+    tm.mark("array")
 
     data = tm.get_data()
     data["n"] = n
@@ -86,7 +92,7 @@ def get_analysis():
 
 
 if __name__ == '__main__':
-    do_test(10000)
+    do_test(1000)
     quit()
     #get_data()
     get_analysis()

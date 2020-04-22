@@ -11,16 +11,17 @@ class NewmanSolver(RandomWalkBetweennessSolver):
         n = g.number_of_nodes()
 
         T = construct_newman_T_matrix(g)
-
-        s, t = np.array(list(combinations(np.arange(n), 2))).transpose()  # Find all pairs s<t
         b = np.zeros(n)  # Initialise array of betweennesses
-        for i, j in g.edges:
+        s, t = np.fromiter(
+            combinations(np.arange(n), 2), dtype='i,i'
+        ).view(np.int).reshape(-1, 2).transpose()  # Find all pairs s<t
 
-            B = np.abs(T[i, s] - T[i, t] - T[j, s] + T[j, t])
+        for v, w in g.edges:
+            temp = np.abs(T[v, s] - T[v, t] - T[w, s] + T[w, t])
 
             # Exclude values where (i =/= s,t) in equation (9)
-            b[i] += np.sum(B[(s != i) & (t != i)])
-            b[j] += np.sum(B[(s != j) & (t != j)])
+            b[v] += np.sum(temp[(s != v) & (t != v)])
+            b[w] += np.sum(temp[(s != w) & (t != w)])
 
         b /= ((n-1)*(n-2))  # normalise
 

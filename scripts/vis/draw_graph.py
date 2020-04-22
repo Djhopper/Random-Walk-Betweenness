@@ -6,15 +6,11 @@ from random_walk_betweenness.calculate import random_walk_centrality
 import numpy as np
 
 
-def draw_graph(graph_name, metric="random_walk_betweenness", labels=False):
-    g = read_graph(graph_name)
-
-    if metric == "random_walk_betweenness":
-        color_by = random_walk_centrality(g)
-    else:
-        raise NotImplementedError
+def draw_graph(graph, labels=False, strategy="nx"):
+    g = read_graph(graph)
 
     # Get colours and positions of nodes
+    color_by = random_walk_centrality(g, strategy=strategy)
     node_color = [color_by[node] for node in g.nodes()]
     cmap = cm.Blues
     pos = nx.drawing.layout.spring_layout(g)
@@ -34,9 +30,8 @@ def draw_graph(graph_name, metric="random_walk_betweenness", labels=False):
     cbar.set_ticks(np.array([0, 1]))
     # Disable axis, add title
     plt.axis('off')
-    #plt.title("Plot showing random walk betweenness\ncentrality of nodes in the " + graph_name)
+    plt.show()
 
 
 if __name__ == '__main__':
-    draw_graph("kite_graph", metric="random_walk_betweenness", labels=True)
-    plt.show()
+    draw_graph("kite_graph",  labels=True)

@@ -24,7 +24,7 @@ class BrandesSolver(RandomWalkBetweennessSolver):
     # Ulrik Brandes and Daniel Fleischer (2005)
     def calculate_on_connected_graph(self, g):
         n = g.number_of_nodes()
-        nrange = np.arange(1, n + 1)
+        v = np.arange(n)
 
         B = construct_B(g, n)
         C = construct_newman_T_matrix(g)  # Construct C as given in equation (1)
@@ -32,14 +32,14 @@ class BrandesSolver(RandomWalkBetweennessSolver):
 
         b = np.zeros(n)  # Initialise array of betweennesses
         for edge_number, e in enumerate(g.edges):
-            v, w = e
+            source, target = e
             row = BC[edge_number, :]  # row is notated Fe● in the paper
             pos = rankdata(-row, method="ordinal")
 
-            b[v] += np.sum((nrange - pos).dot(row))
-            b[w] += np.sum((n + 1 - nrange - pos).dot(row))
+            b[source] += np.sum((v + 1 - pos).dot(row))
+            b[target] += np.sum((n - v - pos).dot(row))
 
-        b = (b - nrange + 1) * (2 / ((n-1) * (n-2)))
+        b = (b - v) * (2 / ((n-1) * (n-2)))
 
         # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
         return dict(zip(range(n), b))

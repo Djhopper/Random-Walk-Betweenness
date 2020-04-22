@@ -1,7 +1,7 @@
 import networkx as nx
 from scipy.sparse import linalg
 import numpy as np
-from scripts.timing.timing_bench import TimeMachine
+from scripts.timing.Profiler import Profiler
 from graphs.random_graphs import get_erdos_renyi
 import pandas as pd
 from scipy.stats import sem
@@ -19,27 +19,27 @@ def do_test(n):
 
     b = np.ones(n-1)
 
-    tm = TimeMachine()
+    tm = Profiler()
 
     preconditioner = linalg.spilu(A)
-    tm.time("spilu_preconditioner")
+    tm.mark("spilu_preconditioner")
     for k in range(10):
         x = preconditioner.solve(b)
-    tm.time("spilu_solve")
+    tm.mark("spilu_solve")
 
     A = A.todense()
-    tm.time("_")
+    tm.mark("_")
 
     for k in range(10):
         x = scipy.linalg.solve(A, b)
-    tm.time("scipy")
+    tm.mark("scipy")
 
     A = np.array(A)
-    tm.time("_")
+    tm.mark("_")
 
     for k in range(10):
         x = np.linalg.solve(A, b)
-    tm.time("numpy")
+    tm.mark("numpy")
 
     data = tm.get_data()
     data["n"] = n
