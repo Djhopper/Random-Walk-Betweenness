@@ -1,11 +1,11 @@
-from random_walk_betweenness.calculate import random_walk_centrality
+from random_walk_betweenness.calculate import random_walk_betweenness
 from networkx.generators.random_graphs import random_lobster, erdos_renyi_graph
 from graphs.read_write import read_graph
 
 
 def do_accuracy_test(g):
-    centrality1 = random_walk_centrality(g, strategy="nx")
-    centrality2 = random_walk_centrality(g, strategy="newman")
+    centrality1 = random_walk_betweenness(g, strategy="nx")
+    centrality2 = random_walk_betweenness(g, strategy="newman")
 
     centrality1 = dict((int(key), value) for key, value in centrality1.items())
     centrality2 = dict((int(key), value) for key, value in centrality2.items())

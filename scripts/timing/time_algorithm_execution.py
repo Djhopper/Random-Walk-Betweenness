@@ -1,4 +1,4 @@
-from random_walk_betweenness.calculate import random_walk_centrality
+from random_walk_betweenness.calculate import random_walk_betweenness
 from timeit import default_timer as timer
 from graphs.read_write import read_graph
 
@@ -17,7 +17,7 @@ def time_random_walk_centrality_algorithm(graph, method_name):
     start_calculation = timer()
 
     # Execute algorithm
-    result = random_walk_centrality(g, strategy=method_name)
+    result = random_walk_betweenness(g, strategy=method_name)
 
     end_calculation = timer()
 

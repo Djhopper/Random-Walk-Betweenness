@@ -2,7 +2,7 @@ import networkx as nx
 from graphs.read_write import read_graph
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from random_walk_betweenness.calculate import random_walk_centrality
+from random_walk_betweenness.calculate import random_walk_betweenness
 import numpy as np
 
 
@@ -10,7 +10,7 @@ def draw_graph(graph, labels=False, strategy="nx"):
     g = read_graph(graph)
 
     # Get colours and positions of nodes
-    color_by = random_walk_centrality(g, strategy=strategy)
+    color_by = random_walk_betweenness(g, strategy=strategy)
     node_color = [color_by[node] for node in g.nodes()]
     cmap = cm.Blues
     pos = nx.drawing.layout.spring_layout(g)

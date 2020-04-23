@@ -14,7 +14,7 @@ random_walk_betweenness_strategies = {
 }
 
 
-def random_walk_centrality(g, strategy="nx", epsilon=None):
+def random_walk_betweenness(g, strategy="nx", epsilon=None):
     if strategy not in random_walk_betweenness_strategies:
         raise ValueError("You must pick one of the following strategies: "
                          + str(list(random_walk_betweenness_strategies.keys())))

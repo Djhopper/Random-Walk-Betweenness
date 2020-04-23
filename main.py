@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from graphs.read_write import get_all_existing_graph_names, read_graph
 from random_walk_betweenness.calculate import random_walk_betweenness_strategies
 from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
-from random_walk_betweenness.calculate import random_walk_centrality
+from random_walk_betweenness.calculate import random_walk_betweenness
 from scripts.vis.draw_graph import draw_graph
 import pandas
 import matplotlib.pyplot as plt
@@ -67,7 +67,7 @@ def main():
         base_directory = cwd[:cwd.find(folder_name)] + folder_name
         output_path = os.path.join(base_directory, "data", "random_walk_betweenness_data", output_file_name+".csv")
 
-        rw_dict = random_walk_centrality(read_graph(graph_name), strategy=method_name)
+        rw_dict = random_walk_betweenness(read_graph(graph_name), strategy=method_name)
         data = [{"node": node, "betweenness": betweenness} for node, betweenness in rw_dict.items()]
         df = pandas.DataFrame(data)
         df.to_csv(output_path, index=False)
