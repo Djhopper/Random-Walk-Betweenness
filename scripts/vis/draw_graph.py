@@ -7,7 +7,10 @@ import numpy as np
 
 
 def draw_graph(graph, labels=False, strategy="nx"):
-    g = read_graph(graph)
+    if type(graph) == str:
+        g = read_graph(graph)
+    else:
+        g = graph
 
     # Get colours and positions of nodes
     color_by = random_walk_betweenness(g, strategy=strategy)

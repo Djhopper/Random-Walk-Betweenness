@@ -8,6 +8,7 @@ class RandomWalkBetweennessSolver:
         return current_flow_betweenness_centrality(g)
 
     def calculate(self, g):
+        g.remove_edges_from(nx.selfloop_edges(g))
         components = [g.subgraph(c).copy() for c in connected_components(g)]
 
         output = {}
