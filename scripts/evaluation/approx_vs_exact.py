@@ -43,7 +43,7 @@ def get_analysis():
             approx_mean = df_f.approx_time.mean()
             approx_over_brandes = approx_mean / brandes_mean
             data.append({
-                "n": n,
+                "nodes": n,
                 "epsilon": epsilon,
                 "approx/brandes": np.log2(approx_over_brandes),
             })
@@ -54,9 +54,10 @@ def get_analysis():
 
 def do_plot():
     df = pd.read_csv("approx_vs_exact/heatmap_analysis.csv")
-    pivot = df.pivot(index="epsilon", columns="n", values="approx/brandes")
-    sns.heatmap(pivot, cbar_kws={"ticks": range(-8, 3, 1)}, center=0, cmap="bwr")
+    pivot = df.pivot(index="epsilon", columns="nodes", values="approx/brandes")
+    sns.heatmap(pivot, cbar_kws={"ticks": range(-8, 3, 1), "label": "score"}, center=0, cmap="bwr")
     plt.savefig("approx_vs_exact/heatmap.png")
+    plt.show()
 
 
 if __name__ == '__main__':
