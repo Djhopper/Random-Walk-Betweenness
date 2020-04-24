@@ -57,7 +57,7 @@ def main():
     output_format = args.output if args.output else input_output_format()
 
     if output_format == "time":
-        print(time_random_walk_centrality_algorithm(graph=graph_name, method_name=method_name))
+        print(time_random_walk_centrality_algorithm(graph=graph_name, strategy=method_name))
 
     elif output_format == "csv":
         output_file_name = input("Please enter a name for your output file:")

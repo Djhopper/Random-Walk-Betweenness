@@ -5,7 +5,6 @@ import numpy as np
 
 
 real_world_graphs = ["CA-GrQc.txt", "Email-Enron.txt", "email-Eu-core.txt", "facebook_combined.txt", "p2p-Gnutella04.txt"]
-# 5k, 36k, 1k, 4k, 10k
 
 
 def get_residuals(graph_name, epsilon=0.05):
@@ -15,7 +14,7 @@ def get_residuals(graph_name, epsilon=0.05):
     approximate_solution = random_walk_betweenness(g, strategy="approx", epsilon=epsilon)
 
     df = pd.DataFrame({"n": n, "exact": exact_solution[n], "approx": approximate_solution[n]} for n in exact_solution)
-    df["residual"] = df.exact - df.approx
+    df["residual"] = df.approx - df.exact
     df["abs_error"] = np.abs(df.residual)
     df["sqr_error"] = df.residual ** 2
 
@@ -35,14 +34,15 @@ def get_data():
 
 def get_analysis():
     data = []
-    for x in ["GRQC_Collab", "EU_Email", "Facebook", "Gnutella_P2P"]:
+    for x,y in zip(["EU_Email", "Facebook", "GRQC_Collab", "Gnutella_P2P"], [1005, 4039, 5242, 10876]):
         df = pd.read_csv("accuracy/"+x+"_Data.csv")
         data.append({
-            "dataset": x,
-            "mean_abs_error": df.abs_error.mean(),
-            "99_quantile": df.abs_error.quantile(0.99),
-            "999_quantile": df.abs_error.quantile(0.999),
-            "max_abs_error": df.abs_error.max(),
+            "dataset": x.replace("_", "-"),
+            "n": y,
+            "mean_abs_error": round(df.abs_error.mean(), 4),
+            "99_quantile": round(df.abs_error.quantile(0.99), 4),
+            "999_quantile": round(df.abs_error.quantile(0.999), 4),
+            "max_abs_error": round(df.abs_error.max(), 4),
         })
     df = pd.DataFrame(data)
     df.to_csv("accuracy/accuracy_on_real_world_graphs.csv", index=False)
