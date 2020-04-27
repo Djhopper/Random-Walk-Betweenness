@@ -6,7 +6,7 @@ from random_walk_betweenness.calculate import random_walk_betweenness
 import numpy as np
 
 
-def draw_graph(graph, labels=False, strategy="nx"):
+def draw_graph(graph, strategy="nx"):
     if type(graph) == str:
         g = read_graph(graph)
     else:
@@ -15,14 +15,13 @@ def draw_graph(graph, labels=False, strategy="nx"):
     # Get colours and positions of nodes
     color_by = random_walk_betweenness(g, strategy=strategy)
     node_color = [color_by[node] for node in g.nodes()]
-    cmap = cm.Blues
+    cmap = "Wistia"
     pos = nx.drawing.layout.spring_layout(g)
     # Plot nodes
     nodes = nx.draw_networkx_nodes(g, node_color=node_color, cmap=cmap, pos=pos, label=True)
     nodes.set_edgecolor("grey")
     # Plot labels
-    if labels:
-        nx.draw_networkx_labels(g, pos=pos)
+    nx.draw_networkx_labels(g, pos=pos)
     # Plot edges
     nx.draw_networkx_edges(g, pos=pos, edge_color="gray")
     # Add legend (colour scale)
@@ -37,4 +36,4 @@ def draw_graph(graph, labels=False, strategy="nx"):
 
 
 if __name__ == '__main__':
-    draw_graph("kite_graph",  labels=True)
+    draw_graph("kite_graph")

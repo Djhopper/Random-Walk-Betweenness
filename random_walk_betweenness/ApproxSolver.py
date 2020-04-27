@@ -33,9 +33,7 @@ class ApproxSolver(RandomWalkBetweennessSolver):
         B = np.zeros(n)  # initialise betweennesses to 0
         for _ in range(k):
             # Select s != t uniformly at random
-            s = random.randint(0, n-1)
-            t = random.randint(0, n-2)
-            t += 1 if t >= s else 0
+            s, t = random.sample(range(n), 2)
 
             # Solve Lp = b
             b = source_sink_array(s, t, n)

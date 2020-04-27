@@ -18,7 +18,7 @@ def generate_house_graph():
     write_graph(g, "house_graph")
 
 
-def generate_krackhart_kite_graph():
+def generate_kite_graph():
     g = krackhardt_kite_graph()
     write_graph(g, "kite_graph")
 
@@ -27,4 +27,4 @@ if __name__ == '__main__':
     generate_bull_graph()
     generate_star_graph()
     generate_house_graph()
-    generate_krackhart_kite_graph()
+    generate_kite_graph()

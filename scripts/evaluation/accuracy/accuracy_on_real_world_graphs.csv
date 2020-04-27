@@ -1,5 +1,5 @@
 999_quantile,99_quantile,dataset,max_abs_error,mean_abs_error,n
 0.006,0.0032,EU-Email,0.006,0.0004,1005
-0.031,0.0059,Facebook,0.1405,0.0006,4039
+0.0322,0.0061,Facebook,0.1401,0.0006,4039
 0.037,0.0163,GRQC-Collab,0.046,0.0009,5242
 0.0021,0.0013,Gnutella-P2P,0.0045,0.0003,10876

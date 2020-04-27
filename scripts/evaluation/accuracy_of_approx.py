@@ -2,6 +2,7 @@ from random_walk_betweenness.calculate import random_walk_betweenness
 from graphs.read_write import read_graph
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 real_world_graphs = ["CA-GrQc.txt", "Email-Enron.txt", "email-Eu-core.txt", "facebook_combined.txt", "p2p-Gnutella04.txt"]
@@ -11,7 +12,9 @@ def get_residuals(graph_name, epsilon=0.05):
     g = read_graph(graph_name)
 
     exact_solution = random_walk_betweenness(g, strategy="brandes")
+    print(graph_name, "brandes")
     approximate_solution = random_walk_betweenness(g, strategy="approx", epsilon=epsilon)
+    print(graph_name, "approx")
 
     df = pd.DataFrame({"n": n, "exact": exact_solution[n], "approx": approximate_solution[n]} for n in exact_solution)
     df["residual"] = df.approx - df.exact
@@ -49,6 +52,21 @@ def get_analysis():
     print(df)
 
 
+def get_skew_analysis():
+    for x in ["EU_Email", "Facebook", "GRQC_Collab", "Gnutella_P2P"]:
+        print(x)
+        df = pd.read_csv("accuracy/"+x+"_Data.csv")
+        df = df[(df.exact < -0.000001) | (df.exact > 0.000001)]
+        print(len(df[df.residual < 0]) / (len(df[df.residual < 0]) + len(df[df.residual > 0])), "are underestimates")
+        df.residual.hist(bins=50)
+        plt.show()
+
+
 if __name__ == '__main__':
-    #get_data()
+    get_skew_analysis()
+    quit()
     get_analysis()
+
+    quit()
+    df = get_residuals(real_world_graphs[3])
+    df.to_csv("accuracy/Facebook_Data.csv", index=False)
