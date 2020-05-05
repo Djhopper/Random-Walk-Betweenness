@@ -50,8 +50,8 @@ def get_data():
             graph_type=graph_type,
             repeats=5,
             timeout=300,
-            max_nodes=3000,
-            node_interval=250)
+            max_nodes=5000,
+            node_interval=500)
         dfs.append(df)
 
     df = pd.concat(dfs)
@@ -120,6 +120,6 @@ def get_data_approx():
 
 
 if __name__ == '__main__':
-    get_data()
-    get_data_approx()
+    #get_data()
+    #get_data_approx()
     get_analysis()

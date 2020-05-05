@@ -1,0 +1,5 @@
+approx_err,approx_mean,brandes_err,brandes_mean,dataset,m,n
+0.0295,2.34,0.100,2.62,Email-EU,16064,1005
+0.160,15.7,0.730,73.0,Facebook,88234,4039
+0.207,22.2,0.385,11.7,GRQC-Collab,14484,5242
+0.770,17.5,50.6,791,Gnutella-P2P,39994,10876

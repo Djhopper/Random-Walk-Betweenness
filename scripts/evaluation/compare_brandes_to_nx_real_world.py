@@ -5,9 +5,9 @@ from scipy.stats import sem
 
 
 def get_data():
-    g = read_graph("facebook_combined.txt")
+    g = read_graph("email-Eu-core.txt")
 
-    N = 1
+    N = 10
     data = []
     for _ in range(N):
         brandes = time_random_walk_centrality_algorithm(g, strategy="brandes")

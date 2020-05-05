@@ -8,14 +8,8 @@ from scipy.stats import sem
 import scipy
 
 
-'''
-This shows that partial LU decomposition method, as implemented in the scipy.sparse.linalg.spilu is about 3 times slower
-than the builtin numpy method of inverting the matrix, even for very large n. Therefore it is unsuitable for speeding up 
-matrix inversion.
-'''
-
-
 def do_test(n):
+    n = n+1
     # Create graph
     g = get_erdos_renyi(n=n, average_degree=10)
     # Setup (create matrix that needs to be inverted)

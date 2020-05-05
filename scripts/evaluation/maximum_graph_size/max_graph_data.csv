@@ -1,0 +1,3 @@
+edges,graph_name,method_name,nodes,time
+60298,_,brandes,12000,12774.4743361
+1001034,_,approx,200000,7079.925499499999

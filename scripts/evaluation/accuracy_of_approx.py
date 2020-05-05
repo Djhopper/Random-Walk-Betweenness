@@ -63,6 +63,12 @@ def get_skew_analysis():
 
 
 if __name__ == '__main__':
+    df = pd.read_csv("accuracy/Gnutella_P2P_Data.csv")
+    df["relative_error"] = np.where(df.exact < 0.00001, 0, (df.exact - df.approx) / (df.exact))
+    df["abs_relative_error"] = np.abs(df.relative_error)
+    print(df.abs_relative_error.mean())
+    quit()
+
     get_skew_analysis()
     quit()
     get_analysis()
