@@ -1,5 +1,5 @@
 from graphs.read_write import read_graph
-from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
+from scripts.timing.time_algorithm_execution import time_random_walk_betweenness_algorithm
 import pandas as pd
 from scipy.stats import sem
 from math import log10, floor
@@ -15,8 +15,8 @@ def get_data():
 
         for _ in range(5):
             print(graph_name, g.number_of_nodes(), _)
-            brandes = time_random_walk_centrality_algorithm(g, strategy="brandes")
-            approx = time_random_walk_centrality_algorithm(g, strategy="approx")
+            brandes = time_random_walk_betweenness_algorithm(g, strategy="brandes")
+            approx = time_random_walk_betweenness_algorithm(g, strategy="approx")
             data.append({
                 "dataset": graph_name,
                 "n": g.number_of_nodes(),

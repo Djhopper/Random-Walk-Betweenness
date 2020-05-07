@@ -1,6 +1,6 @@
 from graphs.random_graphs import get_erdos_renyi
 from random_walk_betweenness.calculate import random_walk_betweenness
-from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
+from scripts.timing.time_algorithm_execution import time_random_walk_betweenness_algorithm
 import pandas as pd
 from scipy.stats import sem
 
@@ -25,7 +25,7 @@ def try_approx(n):
 
 
 def time_big_graph():
-    data = [time_random_walk_centrality_algorithm("Email-Enron.txt", strategy="approx", epsilon=0.5) for _ in range(5)]
+    data = [time_random_walk_betweenness_algorithm("Email-Enron.txt", strategy="approx", epsilon=0.5) for _ in range(5)]
     df = pd.DataFrame(data)
     df.to_csv("maximum_graph_size/data.csv", index=False)
 
@@ -39,10 +39,10 @@ def big_graph_results():
 def time_max_graphs():
     data = []
     g = get_erdos_renyi(12000, 10)
-    data.append(time_random_walk_centrality_algorithm(g, strategy="brandes"))
+    data.append(time_random_walk_betweenness_algorithm(g, strategy="brandes"))
     print(data[-1])
     g = get_erdos_renyi(200000, 10)
-    data.append(time_random_walk_centrality_algorithm(g, strategy="approx", epsilon=0.5))
+    data.append(time_random_walk_betweenness_algorithm(g, strategy="approx", epsilon=0.5))
     print(data[-1])
 
     df = pd.DataFrame(data)

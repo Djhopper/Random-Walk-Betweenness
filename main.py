@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from graphs.read_write import get_all_existing_graph_names, read_graph
 from random_walk_betweenness.calculate import random_walk_betweenness_strategies
-from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
+from scripts.timing.time_algorithm_execution import time_random_walk_betweenness_algorithm
 from random_walk_betweenness.calculate import random_walk_betweenness
 from scripts.vis.draw_graph import draw_graph
 import pandas
@@ -57,7 +57,7 @@ def main():
     output_format = args.output if args.output else input_output_format()
 
     if output_format == "time":
-        print(time_random_walk_centrality_algorithm(graph=graph_name, strategy=method_name))
+        print(time_random_walk_betweenness_algorithm(graph=graph_name, strategy=method_name))
 
     elif output_format == "csv":
         output_file_name = input("Please enter a name for your output file:")

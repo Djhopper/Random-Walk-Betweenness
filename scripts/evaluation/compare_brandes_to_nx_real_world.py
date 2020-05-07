@@ -1,5 +1,5 @@
 from graphs.read_write import read_graph
-from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
+from scripts.timing.time_algorithm_execution import time_random_walk_betweenness_algorithm
 import pandas as pd
 from scipy.stats import sem
 
@@ -10,8 +10,8 @@ def get_data():
     N = 10
     data = []
     for _ in range(N):
-        brandes = time_random_walk_centrality_algorithm(g, strategy="brandes")
-        networkx = time_random_walk_centrality_algorithm(g, strategy="nx")
+        brandes = time_random_walk_betweenness_algorithm(g, strategy="brandes")
+        networkx = time_random_walk_betweenness_algorithm(g, strategy="nx")
         data.append({
             "brandes_time": brandes["time"],
             "nx_time": networkx["time"]

@@ -1,4 +1,5 @@
-from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
+from random_walk_betweenness.RandomWalkBetweennessSolver \
+    import RandomWalkBetweennessSolver
 from random_walk_betweenness.NewmanSolver import NewmanSolver
 from random_walk_betweenness.BrandesSolver import BrandesSolver
 from random_walk_betweenness.ApproxSolver import ApproxSolver
@@ -14,10 +15,14 @@ random_walk_betweenness_strategies = {
 }
 
 
+# Given a NetworkX Graph, returns a dictionary mapping
+# [node] -> [random walk betweenness]
 def random_walk_betweenness(g, strategy="nx", epsilon=None):
     if strategy not in random_walk_betweenness_strategies:
-        raise ValueError("You must pick one of the following strategies: "
-                         + str(list(random_walk_betweenness_strategies.keys())))
+        raise ValueError(
+            "You must pick one of the following strategies: "
+            + str(list(random_walk_betweenness_strategies.keys()))
+        )
 
     if epsilon is None:
         solver = random_walk_betweenness_strategies[strategy]()

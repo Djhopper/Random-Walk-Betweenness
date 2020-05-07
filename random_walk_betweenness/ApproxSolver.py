@@ -46,5 +46,7 @@ class ApproxSolver(RandomWalkBetweennessSolver):
             B += np.bincount(w, np.where((w != s) & (w != t), val, 0), minlength=B.size)
 
         B *= c_star / (2 * k)
-        # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
+
+        # Return the result as a dictionary mapping
+        # [node]->[random walk betweenness centrality]
         return dict(zip(range(n), B))

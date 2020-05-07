@@ -1,12 +1,13 @@
 import numpy as np
 from random_walk_betweenness.helper_functions import construct_newman_T_matrix
-from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
+from random_walk_betweenness.RandomWalkBetweennessSolver \
+    import RandomWalkBetweennessSolver
 from itertools import combinations
 
 
 class NewmanSolver(RandomWalkBetweennessSolver):
-    # Implements algorithm described in 'A measure of betweenness centrality based on random walks',
-    # M.E.J. Newman (2004)
+    # Implements algorithm described in 'A measure of betweenness
+    # centrality based on random walks', M.E.J. Newman (2004)
     def calculate_on_connected_graph(self, g):
         n = g.number_of_nodes()
 
@@ -19,11 +20,12 @@ class NewmanSolver(RandomWalkBetweennessSolver):
         for v, w in g.edges:
             temp = np.abs(T[v, s] - T[v, t] - T[w, s] + T[w, t])
 
-            # Exclude values where (i =/= s,t) in equation (9)
+            # Exclude values where (v =/= s,t)
             b[v] += np.sum(temp[(s != v) & (t != v)])
             b[w] += np.sum(temp[(s != w) & (t != w)])
 
         b /= ((n-1)*(n-2))  # normalise
 
-        # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
+        # Return the result as a dictionary mapping
+        # [node]->[random walk betweenness]
         return dict(zip(range(n), b))

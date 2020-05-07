@@ -1,5 +1,5 @@
 from graphs.random_graphs import get_erdos_renyi
-from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
+from scripts.timing.time_algorithm_execution import time_random_walk_betweenness_algorithm
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -17,10 +17,10 @@ def get_data():
         for n in ns:
             g = get_erdos_renyi(n, 10)
             print("n=", n)
-            brandes_data = time_random_walk_centrality_algorithm(graph=g, strategy="brandes")
+            brandes_data = time_random_walk_betweenness_algorithm(graph=g, strategy="brandes")
             for epsilon in epsilons:
                 print("n=",n,", epsilon=",epsilon)
-                approx_data = time_random_walk_centrality_algorithm(graph=g, strategy="approx", epsilon=epsilon)
+                approx_data = time_random_walk_betweenness_algorithm(graph=g, strategy="approx", epsilon=epsilon)
                 data.append({
                     "brandes_time": brandes_data["time"],
                     "approx_time": approx_data["time"],
@@ -79,10 +79,10 @@ def get_data2():
                 p = p_func(n)
                 g = get_erdos_renyi(n, n*p)
                 print("n=", g.number_of_nodes(), "m=", g.number_of_edges())
-                brandes_data = time_random_walk_centrality_algorithm(graph=g, strategy="brandes")
+                brandes_data = time_random_walk_betweenness_algorithm(graph=g, strategy="brandes")
                 for epsilon in epsilons:
                     print("epsilon=", epsilon)
-                    approx_data = time_random_walk_centrality_algorithm(graph=g, strategy="approx", epsilon=epsilon)
+                    approx_data = time_random_walk_betweenness_algorithm(graph=g, strategy="approx", epsilon=epsilon)
                     data.append({
                         "p_name": p_name,
                         "brandes_time": brandes_data["time"],

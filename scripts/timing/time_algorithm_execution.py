@@ -3,10 +3,10 @@ from timeit import default_timer as timer
 from graphs.read_write import read_graph
 
 
-# Runs a random walk centrality algorithm on a graph and returns a dictionary with information about how long it took
+# Runs a random walk algorithm on a graph and returns a dictionary with information about how long it took
 # graph - can be a networkx graph, or can be a string which is the name of a graph that has been stored previously
 # method_name - string, dictates which implementation will be used
-def time_random_walk_centrality_algorithm(graph, strategy, epsilon=None):
+def time_random_walk_betweenness_algorithm(graph, strategy, epsilon=None):
     # Setup graph
     if type(graph) == str:
         g = read_graph(graph)

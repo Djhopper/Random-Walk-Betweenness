@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.stats import rankdata
 from random_walk_betweenness.helper_functions import construct_newman_T_matrix
-from random_walk_betweenness.RandomWalkBetweennessSolver import RandomWalkBetweennessSolver
+from random_walk_betweenness.RandomWalkBetweennessSolver \
+    import RandomWalkBetweennessSolver
 
 
 # Constructs the (n by m) matrix B where:
@@ -41,5 +42,6 @@ class BrandesSolver(RandomWalkBetweennessSolver):
 
         b = (b - v) * (2 / ((n-1) * (n-2)))
 
-        # Return the result as a dictionary mapping (node)->(random walk betweenness centrality)
+        # Return the result as a dictionary mapping
+        # [node]->[random walk betweenness]
         return dict(zip(range(n), b))

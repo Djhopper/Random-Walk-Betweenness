@@ -1,7 +1,7 @@
 from graphs.random_graphs import get_erdos_renyi
 from graphs.random_graphs import get_watts_strogatz_graph
 from graphs.random_graphs import get_holme_kim
-from scripts.timing.time_algorithm_execution import time_random_walk_centrality_algorithm
+from scripts.timing.time_algorithm_execution import time_random_walk_betweenness_algorithm
 import pandas as pd
 from scipy.stats import sem
 import numpy as np
@@ -24,7 +24,7 @@ def time_until_failure(strategies, graph_generator, graph_type, repeats=10, time
         for i in range(repeats):
             g = graph_generator(nodes)
             for strategy in list(strategies):
-                data = time_random_walk_centrality_algorithm(g, strategy)
+                data = time_random_walk_betweenness_algorithm(g, strategy)
                 if data["time"] >= timeout:
                     strategies.remove(strategy)
                     data["time"] = "timeout"
